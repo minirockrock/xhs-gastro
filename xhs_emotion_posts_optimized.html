@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>小红书帖子正文 · 情感共鸣类 01-12（CES优化版）</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif; background: #f5f6fa; color: #1a1a2e; }
+
+.header {
+  background: linear-gradient(135deg, #ff2442 0%, #ff6b6b 60%, #ffa07a 100%);
+  color: white; padding: 40px 24px 60px; text-align: center; position: relative; overflow: hidden;
+}
+.header::after {
+  content: ''; position: absolute; bottom: -1px; left: 0; right: 0; height: 44px;
+  background: #f5f6fa; border-radius: 44px 44px 0 0;
+}
+.header h1 { font-size: 24px; font-weight: 900; margin-bottom: 8px; }
+.header p { font-size: 13px; opacity: .9; line-height: 1.7; }
+.badge { display: inline-block; background: rgba(255,255,255,.22); border: 1px solid rgba(255,255,255,.4); padding: 3px 12px; border-radius: 20px; font-size: 12px; margin: 6px 4px 0; }
+
+.container { max-width: 1000px; margin: 0 auto; padding: 0 16px 80px; }
+
+/* 优化说明 */
+.optimize-tips {
+  background: linear-gradient(135deg, #fff5f7, #fff0f3);
+  border: 1px solid #ffd5dc; border-radius: 14px; padding: 20px; margin: 24px 0;
+}
+.optimize-tips h3 { font-size: 15px; font-weight: 700; margin-bottom: 12px; color: #ff2442; }
+.optimize-tips ul { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.optimize-tips li {
+  font-size: 13px; color: #444; padding-left: 18px; position: relative;
+  line-height: 1.6; list-style: none;
+}
+.optimize-tips li::before { content: '→'; position: absolute; left: 0; color: #ff2442; font-weight: 700; }
+
+/* 选题块 */
+.topic-block { margin-top: 36px; }
+.topic-header {
+  display: flex; align-items: center; gap: 12px;
+  background: white; border-radius: 14px; padding: 14px 20px;
+  box-shadow: 0 2px 10px rgba(0,0,0,.06); margin-bottom: 14px;
+  border-left: 5px solid #ff2442;
+}
+.topic-no { font-size: 28px; font-weight: 900; color: #ffd5dc; line-height: 1; min-width: 36px; }
+.topic-info { flex: 1; }
+.topic-info .label { font-size: 11px; color: #ff2442; font-weight: 700; margin-bottom: 3px; }
+.topic-info .title { font-size: 16px; font-weight: 800; }
+.topic-ref { font-size: 12px; color: #aaa; white-space: nowrap; }
+
+/* 帖子双列 */
+.posts-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+@media(max-width: 680px){ .posts-row { grid-template-columns: 1fr; } }
+
+.post-card {
+  background: white; border-radius: 16px; padding: 22px;
+  box-shadow: 0 2px 12px rgba(0,0,0,.05);
+  display: flex; flex-direction: column; gap: 12px;
+}
+
+.post-version {
+  display: flex; align-items: center; gap: 8px;
+}
+.version-badge {
+  font-size: 11px; font-weight: 800; padding: 3px 10px; border-radius: 20px;
+}
+.ver-a { background: #fff0f3; color: #ff2442; }
+.ver-b { background: #fff7ed; color: #f97316; }
+.version-strategy { font-size: 12px; color: #888; }
+
+.post-title-box {
+  background: #f8f9fc; border-radius: 10px; padding: 12px 14px;
+}
+.post-title-label { font-size: 10px; color: #aaa; font-weight: 700; letter-spacing: .5px; margin-bottom: 5px; }
+.post-title { font-size: 14px; font-weight: 800; color: #1a1a2e; line-height: 1.5; }
+
+.post-body {
+  font-size: 13.5px; color: #333; line-height: 1.9;
+  white-space: pre-wrap; cursor: pointer;
+  padding: 14px; border-radius: 10px; background: #fafafa;
+  border: 1.5px dashed #eee; transition: border-color .2s, background .2s;
+  position: relative;
+}
+.post-body:hover { border-color: #ff2442; background: #fff5f7; }
+.post-body::after {
+  content: '点击复制';
+  position: absolute; top: 8px; right: 10px;
+  font-size: 11px; color: #ff2442; opacity: 0;
+  transition: opacity .2s;
+}
+.post-body:hover::after { opacity: 1; }
+.post-body.copied { border-color: #22c55e; background: #f0fff4; }
+.post-body.copied::after { content: '✓ 已复制'; color: #22c55e; opacity: 1; }
+
+/* CES优化标记 */
+.ces-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.ces-tag {
+  font-size: 10px; padding: 2px 8px; border-radius: 12px;
+  font-weight: 600;
+}
+.ces-comment { background: #fef3c7; color: #d97706; }
+.ces-save { background: #d1fae5; color: #059669; }
+.ces-follow { background: #fce7f3; color: #be185d; }
+.ces-ctr { background: #e0e7ff; color: #4f46e5; }
+
+.post-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.tag {
+  font-size: 11px; padding: 3px 10px; border-radius: 20px;
+  background: #f0f0f0; color: #555;
+}
+.tag.hot { background: #fff0f3; color: #ff2442; }
+
+.post-tip {
+  font-size: 12px; color: #888; background: #f8f9fc; border-radius: 8px;
+  padding: 8px 12px; border-left: 3px solid #ff2442; line-height: 1.6;
+}
+
+/* 分隔线 */
+.divider { height: 1px; background: linear-gradient(90deg,transparent,#eee,transparent); margin: 10px 0; }
+
+footer { text-align: center; padding: 32px 16px; color: #bbb; font-size: 12px; line-height: 1.8; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>❤️ 情感共鸣类帖子正文 · CES优化版</h1>
+  <p>基于小红书CES评分公式优化 · 强化评论×4 收藏×1 关注×8权重</p>
+  <div>
+    <span class="badge">❤️ 情感共鸣型</span>
+    <span class="badge">24篇正文</span>
+    <span class="badge">冷启动优化</span>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- 优化说明 -->
+  <div class="optimize-tips">
+    <h3>📈 CES优化策略（基于算法公式）</h3>
+    <ul>
+      <li><strong>评论×4权重</strong>：每篇埋2-3个互动钩子（提问/投票/求助）</li>
+      <li><strong>收藏×1权重</strong>：清单类加"收藏备用"引导</li>
+      <li><strong>关注×8权重</strong>：结尾加"关注我"引导（最高权重）</li>
+      <li><strong>CTR优化</strong>：标题加悬念/数字/情绪词提升点击率</li>
+      <li><strong>互动速度</strong>：发布后1小时内积极回复评论</li>
+      <li><strong>冷启动目标</strong>：不求爆款，求3-5%互动率晋级初始池</li>
+    </ul>
+  </div>
+
+  <!-- ===== 01 ===== -->
+  <div class="topic-block">
+    <div class="topic-header">
+      <div class="topic-no">01</div>
+      <div class="topic-info">
+        <div class="label">情感共鸣 · 孤独感 · 悬念结尾</div>
+        <div class="title">关于我一个人去做了有痛胃镜，比想象中……</div>
+      </div>
+      <div class="topic-ref">参考赞41670</div>
+    </div>
+    <div class="posts-row">
+
+      <div class="post-card">
+        <div class="post-version">
+          <span class="version-badge ver-a">版本 A</span>
+          <span class="version-strategy">悬念揭秘·心理感受 → 冲赞+评论</span>
+        </div>
+        <div class="ces-tags">
+          <span class="ces-tag ces-comment">💬 评论钩子×3</span>
+          <span class="ces-tag ces-follow">⭐ 关注引导</span>
+          <span class="ces-tag ces-ctr">👆 悬念CTR</span>
+        </div>
+        <div class="post-title-box">
+          <div class="post-title-label">标题</div>
+          <div class="post-title">关于我一个人去做了有痛胃镜，比想象中……</div>
+        </div>
+        <div class="post-body" onclick="copyText(this)">一个人去做了有痛胃镜。
+
+不是不想找人陪，是觉得这种事，说了别人也替不了。
+
+躺在检查床上的时候，医生让我侧躺、咬好牙垫。我盯着天花板，听见自己心跳的声音。
+
+管子进去的那一刻——
+
+我后悔了。
+
+不是疼，是那种无法控制的异物感，让你本能地想反抗。
+
+眼泪直接飙出来，但我没动，因为我知道一动会更难受。
+
+大概3分钟，像一个世纪那么长。
+
+结束后我坐在走廊的椅子上，缓了十分钟才站起来。
+
+比想象中难受，但也比想象中快。
+
+医生说我挺能忍的，很多人做到一半就要求停。
+
+📌 如果你也在纠结做有痛还是无痛——
+
+我的建议是：能选无痛就选无痛，别学我逞强。
+
+但如果你真的只能做有痛，记住：
+① 放松比紧张好受一百倍
+② 鼻子吸气、嘴巴呼气
+③ 眼泪流出来不丢人
+
+❓ 问大家：你们做过有痛胃镜吗？当时怎么挺过来的？评论区聊聊👇
+
+💾 收藏这篇，万一以后用得上
+
+⭐ 关注我，分享更多检查真实经历，帮你少走弯路
+
+#胃镜 #有痛胃镜 #一个人去医院 #真实经历 #健康检查</div>
+        <div class="post-tags">
+          <span class="tag hot">🔥 评论钩子×3</span>
+          <span class="tag">关注引导</span>
+          <span class="tag">收藏引导</span>
+        </div>
+        <div class="post-tip">💡 CES优化：3个评论提问+收藏引导+关注引导（关注权重8分最高）</div>
+      </div>
+
+      <div class="post-card">
+        <div class="post-version">
+          <span class="version-badge ver-b">版本 B</span>
+          <span class="version-strategy">时间线流水账 → 冲收藏</span>
+        </div>
+        <div class="ces-tags">
+          <span class="ces-tag ces-save">💾 收藏引导×2</span>
+          <span class="ces-tag ces-comment">💬 投票互动</span>
+          <span class="ces-tag ces-follow">⭐ 关注引导</span>
+        </div>
+        <div class="post-title-box">
+          <div class="post-title-label">标题</div>
+          <div class="post-title">有痛胃镜全流程记录｜从预约到出报告的48小时</div>
+        </div>
+        <div class="post-body" onclick="copyText(this)">刚做完有痛胃镜，趁记忆还新鲜，把全流程记下来。
+
+📋 时间线：
+
+【Day1 上午】
+医院挂号 → 消化内科开单 → 缴费 → 预约检查时间
+💰 费用：胃镜约300元（不含病理）
+
+【Day1 下午】
+做心电图、抽血查传染病（部分医院要求）
+⚠️ 注意：有痛胃镜不需要麻醉评估，无痛需要
+
+【Day2 早上】
+空腹8小时以上 → 到内镜中心报到 → 喝消泡剂 → 等待叫号
+
+【检查中】
+侧躺 → 咬牙垫 → 管子进入
+⏱️ 实际检查时间：约3-5分钟
+📝 感受：强烈异物感、想呕吐、流泪是正常的
+
+【检查后】
+10分钟出初步报告 → 30分钟后可以喝水 → 1小时后可以吃东西
+
+📌 给第一次做的你几个建议：
+1. 带纸巾，会流眼泪和口水
+2. 穿宽松衣服，别穿高领
+3. 做完别急着走，坐一会儿缓一缓
+4. 带个朋友吧，一个人真的有点难
+
+💾 收藏这篇，做之前再看一遍
+
+🗳️ 投票：你做过/打算做哪种？
+A. 有痛胃镜（勇士版）
+B. 无痛胃镜（舒适版）
+C. 还没做，正在纠结
+
+评论区扣A/B/C，让我看看大家的选择👇
+
+⭐ 关注我，持续更新检查攻略
+
+#有痛胃镜 #胃镜流程 #检查攻略 #收藏备用 #健康日记</div>
+        <div class="post-tags">
+          <span class="tag hot">🔥 清单收藏型</span>
+          <span class="tag">投票互动</span>
+          <span class="tag">收藏引导×2</span>
+        </div>
+        <div class="post-tip">💡 CES优化：清单结构易收藏+投票互动（评论权重4分）+双重收藏引导</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ===== 02 ===== -->
+  <div class="topic-block">
+    <div class="topic-header">
+      <div class="topic-no">02</div>
+      <div class="topic-info">
+        <div class="label">情感共鸣 · 第一次经历 · 悬念问题</div>
+        <div class="title">第一次做胃肠镜，全麻醒来我说了什么……</div>
+      </div>
+      <div class="topic-ref">参考赞22723</div>
+    </div>
+    <div class="posts-row">
+
+      <div class="post-card">
+        <div class="post-version">
+          <span class="version-badge ver-a">版本 A</span>
+          <span class="version-strategy">幽默自嘲·笑着学知识 → 赞+评双收</span>
+        </div>
+        <div class="ces-tags">
+          <span class="ces-tag ces-comment">💬 评论钩子×3</span>
+          <span class="ces-tag ces-follow">⭐ 关注引导</span>
+          <span class="ces-tag ces-ctr">👆 悬念CTR</span>
+        </div>
+        <div class="post-title-box">
+          <div class="post-title-label">标题</div>
+          <div class="post-title">第一次做胃肠镜，全麻醒来我说了什么……</div>
+        </div>
+        <div class="post-body" onclick="copyText(this)">全麻醒来第一句话：
+
+"我做完了吗？"
+
+护士说："做完了，你睡得可香了。"
+
+我："那我说什么了吗？"
+
+护士笑了一下："你说了很多。"
+
+我："……比如？"
+
+护士："你说'再给我5分钟，这个梦还没做完'。"
+
+我：？？？
+
+然后我就开始疯狂回忆，我在梦里到底在干嘛？？
+
+📌 关于全麻胃肠镜的几个真相：
+
+1️⃣ 全麻不是睡觉，是药物让你失去意识和记忆
+2️⃣ 醒来后可能会有点迷糊，像喝多了但又不难受
+3️⃣ 有人醒来会胡说八道，有人很安静，因人而异
+4️⃣ 2小时内不能开车、不能签重要文件
+
+❓ 问大家：你们全麻醒来后说过什么奇怪的话？
+
+我朋友说她说了一句"我的猫会后空翻"，护士一脸懵😂
+
+评论区分享一下你的"全麻名言"，让我知道我不是一个人👇
+
+💾 收藏这篇，缓解你对全麻的恐惧
+
+⭐ 关注我，更多检查冷知识
+
+#全麻 #无痛胃肠镜 #搞笑经历 #第一次 #健康检查</div>
+        <div class="post-tags">
+          <span class="tag hot">🔥 幽默高互动</span>
+          <span class="tag">评论钩子×3</span>
+          <span class="tag">收藏引导</span>
+        </div>
+        <div class="post-tip">💡 CES优化：幽默内容易引发评论+3个互动提问+收藏缓解焦虑</div>
+      </div>
+
+      <div class="post-card">
+        <div class="post-version">
+          <span class="version-badge ver-b">版本 B</span>
+          <span class="version-strategy">科普解答·消除焦虑 → 冲收藏</span>
+        </div>
+        <div class="ces-tags">
+          <span class="ces-tag ces-save">💾 收藏引导×2</span>
+          <span class="ces-tag ces-comment">💬 求助互动</span>
+          <span class="ces-tag ces-follow">⭐ 关注引导</span>
+        </div>
+        <div class="post-title-box">
+          <div class="post-title-label">标题</div>
+          <div class="post-title">全麻胃肠镜会乱说话？我整理了大家最担心的8个问题</div>
+        </div>
+        <div class="post-body" onclick="copyText(this)">做无痛胃肠镜前，我搜了上百篇笔记，整理了大家最常问的8个问题——
+
+📋 Q&A：
+
+Q1：全麻会不会说胡话/泄露秘密？
+→ 有可能，但概率不高。即使说了也是短暂的，护士见多了不会在意。
+
+Q2：全麻对身体有伤害吗？
+→ 常规剂量很安全，代谢快，检查后2小时基本清醒。
+
+Q3：全麻和半麻有什么区别？
+→ 全麻=无意识；半麻=有意识但喉咙麻醉。胃肠镜一般全麻。
+
+Q4：醒来后多久能正常活动？
+→ 2小时内不能开车，当天别做重要决定，其他正常。
+
+Q5：全麻前要注意什么？
+→ 空腹8小时，禁水2小时，如实告知病史。
+
+Q6：会做梦吗？
+→ 有些人会，有些人像断片，因人而异。
+
+Q7：全麻贵吗？
+→ 比有痛贵500-800元左右（各地不同）。
+
+Q8：什么人不能做全麻？
+→ 严重心肺疾病、麻醉药过敏、极度肥胖等，需医生评估。
+
+💾 收藏这篇，做之前再看一遍
+
+❓ 你还有什么担心的？评论区问我，我尽量回答👇
+
+⭐ 关注我，持续更新检查攻略
+
+#无痛胃肠镜 #全麻 #检查攻略 #收藏备用 #医学科普</div>
+        <div class="post-tags">
+          <span class="tag hot">🔥 问答收藏型</span>
+          <span class="tag">8个问题</span>
+          <span class="tag">求助互动</span>
+        </div>
+        <div class="post-tip">💡 CES优化：问答结构易收藏+求助式评论引导（激发帮助欲）+双重收藏</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ===== 03 ===== -->
+  <div class="topic-block">
+    <div class="topic-header">
+      <div class="topic-no">03</div>
+      <div class="topic-info">
+        <div class="label">情感共鸣 · 极简悬念 · 城市定位</div>
+        <div class="title">在【城市】做了个胃镜，有些话想告诉你</div>
+      </div>
+      <div class="topic-ref">参考赞2761</div>
+    </div>
+    <div class="posts-row">
+
+      <div class="post-card">
+        <div class="post-version">
+          <span class="version-badge ver-a">版本 A</span>
+          <span class="version-strategy">上海版·候诊室视角 → 冲赞+评论</span>
+        </div>
+        <div class="ces-tags">
+          <span class="ces-tag ces-comment">💬 评论钩子×2</span>
+          <span class="ces-tag ces-follow">⭐ 关注引导</span>
+          <span class="ces-tag ces-save">💾 收藏引导</span>
+        </div>
+        <div class="post-title-box">
+          <div class="post-title-label">标题</div>
+          <div class="post-title">在上海做了个胃镜，有些话想告诉你</div>
+        </div>
+        <div class="post-body" onclick="copyText(this)">在上海某三甲医院的候诊室，我观察了两个小时。
+
+坐在我对面的阿姨，一个人来的，检查服里还穿着毛衣，护士让她脱掉，她说"冷"。
+
+旁边的小伙子，一直在刷手机，但屏幕根本没动，他在紧张。
+
+还有一对夫妻，妻子进去检查了，丈夫在外面踱步，每过一分钟看一次门。
+
+我突然意识到——
+
+来这里的人，不管年龄、性别、职业，都有一个共同点：
+
+害怕，但还是来了。
+
+📌 我想告诉你的几句话：
+
+1️⃣ 害怕是正常的，不丢人
+2️⃣ 一个人来也没关系，护士和医生都很温柔
+3️⃣ 检查很快，有痛3分钟，无痛睡一觉
+4️⃣ 最难受的是等待，不是检查本身
+
+❓ 问大家：你检查前等了多久？怎么缓解紧张的？
+
+我靠刷搞笑视频，但笑到一半被叫号，表情管理都崩了😂
+
+评论区说说你的候诊故事👇
+
+💾 收藏这篇，紧张的时候看看
+
+⭐ 关注我，分享更多检查真实感受
+
+#上海胃镜 #医院检查 #真实感受 #候诊故事 #健康检查</div>
+        <div class="post-tags">
+          <span class="tag hot">🔥 场景共鸣</span>
+          <span class="tag">评论钩子×2</span>
+          <span class="tag">收藏缓解焦虑</span>
+        </div>
+        <div class="post-tip">💡 CES优化：场景描述引发共鸣+2个互动提问+收藏引导（缓解焦虑类内容收藏率高）</div>
+      </div>
+
+      <div class="post-card">
+        <div class="post-version">
+          <span class="version-badge ver-b">版本 B</span>
+          <span class="version-strategy">无锡版·家人陪同 → 可替换城市复用</span>
+        </div>
+        <div class="ces-tags">
+          <span class="ces-tag ces-comment">💬 投票互动</span>
+          <span class="ces-tag ces-save">💾 收藏引导</span>
+          <span class="ces-tag ces-follow">⭐ 关注引导</span>
+        </div>
+        <div class="post-title-box">
+          <div class="post-title-label">标题</div>
+          <div class="post-title">在无锡做了个胃镜，有些话想告诉你（附流程）</div>
+        </div>
+        <div class="post-body" onclick="copyText(this)">在无锡做完胃镜，把流程整理给同城的你——
+
+📋 无锡胃镜流程（以人民医院为例）：
+
+【预约】
+→ 消化内科门诊开单
+→ 缴费后去内镜中心预约
+→ 无痛需要先做麻醉评估
+⏱️ 等待时间：约1-2周
+
+【检查前】
+→ 空腹8小时以上
+→ 无痛需家属陪同
+→ 带齐医保卡、检查单
+
+【检查当天】
+→ 内镜中心报到
+→ 喝消泡剂、咽部麻醉
+→ 等待叫号
+
+【检查后】
+→ 30分钟出报告
+→ 如有活检，病理报告3-5个工作日取
+
+💰 费用参考：
+有痛胃镜：约250元
+无痛胃镜：约800元（含麻醉）
+
+🗳️ 投票：你在无锡做过胃镜吗？
+A. 做过，在人民医院
+B. 做过，在二院/中医院
+C. 还没做，正在了解
+
+评论区扣A/B/C，看看大家都去哪👇
+
+💾 收藏这篇，无锡小伙伴做之前再看
+
+⭐ 关注我，持续更新本地检查攻略
+
+#无锡胃镜 #无锡医院 #检查流程 #本地攻略 #收藏备用
+
+📌 其他城市版本：把"无锡"替换为"苏州/常州/江阴/宜兴"即可复用</div>
+        <div class="post-tags">
+          <span class="tag hot">🔥 本地收藏型</span>
+          <span class="tag">投票互动</span>
+          <span class="tag">可复用模板</span>
+        </div>
+        <div class="post-tip">💡 CES优化：本地精准内容易收藏+投票互动+关注引导（本地账号关注价值高）</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ===== 04 ===== -->
+  <div class="topic-block">
+    <div class="topic-header">
+      <div class="topic-no">04</div>
+      <div class="topic-info">
+        <div class="label">情感共鸣 · 情绪反转 · 痛苦→感悟</div>
+        <div class="title">胃镜把我做哭了，但我不后悔去做</div>
+      </div>
+      <div class="topic-ref">参考逻辑：情绪反转型均赞>3000</div>
+    </div>
+    <div class="posts-row">
+
+      <div class="post-card">
+        <div class="post-version">
+          <span class="version-badge ver-a">版本 A</span>
+          <span class="version-strategy">情绪释放·找到答案的感动 → 催泪高赞</span>
+        </div>
+        <div class="ces-tags">
+          <span class="ces-tag ces-comment">💬 评论钩子×3</span>
+          <span class="ces-tag ces-follow">⭐ 关注引导</span>
+          <span class="ces-tag ces-save">💾 收藏引导</span>
+        </div>
+        <div class="post-title-box">
+          <div class="post-title-label">标题</div>
+          <div class="post-title">胃镜把我做哭了，但我不后悔去做</div>
+        </div>
+        <div class="post-body" onclick="copyText(this)">做胃镜的时候，我没哭。
+
+是看到报告的时候哭的。
+
+胃镜报告显示：慢性萎缩性胃炎，中度。
+
+医生说："再拖下去，可能会更严重。"
+
+我坐在医院走廊的椅子上，眼泪就掉下来了。
+
+不是因为害怕，是因为——
+
+幸好来了。
+
+📌 我的胃不舒服已经两年了。
+
+总是告诉自己：可能是吃坏了，可能是压力大，可能是熬夜太多。
+
+每次不舒服，就吃点药压下去，然后继续忙。
+
+直到上个月，朋友跟我说："你去查一下吧，查完就安心了。"
+
+我想，查完安心。
+
+没想到，查完更不安心了——
+
+但医生说："发现得早，好好调理，定期复查，问题不大。"
+
+📌 我想告诉每一个看到这篇的人：
+
+身体发出的信号，别忽视。
+检查可能会发现问题，但不检查，问题不会自己消失。
+
+❓ 问大家：你有没有忽视身体信号的经历？后来怎么样了？
+
+评论区说说，互相提醒👇
+
+💾 收藏这篇，提醒自己和身边的人
+
+⭐ 关注我，分享更多健康真实经历
+
+#胃镜 #胃炎 #健康警示 #真实经历 #早发现早治疗</div>
+        <div class="post-tags">
+          <span class="tag hot">🔥 情绪反转</span>
+          <span class="tag">评论钩子×3</span>
+          <span class="tag">催泪共鸣</span>
+        </div>
+        <div class="post-tip">💡 CES优化：情绪反转易引发评论共鸣+3个深度互动提问+收藏引导（警示类内容收藏率高）</div>
+      </div>
+
+      <div class="post-card">
+        <div class="post-version">
+          <span class="version-badge ver-b">版本 B</span>
+          <span class="version-strategy">有痛过程·正向收尾 → 引发评论</span>
+        </div>
+        <div class="ces-tags">
+          <span class="ces-tag ces-comment">💬 投票+求助×2</span>
+          <span class="ces-tag ces-save">💾 收藏引导</span>
+          <span class="ces-tag ces-follow">⭐ 关注引导</span>
+        </div>
+        <div class="post-title-box">
+          <div class="post-title-label">标题</div>
+          <div class="post-title">有痛胃镜把我做哭了，但我建议你也去做一次</div>
+        </div>
+        <div class="post-body" onclick="copyText(this)">先别急着骂我，听我讲完。
+
+有痛胃镜确实难受。
+
+管子进去的时候，我眼泪鼻涕一起流，手抓着床单，指节都白了。
+
+但整个过程只有3分钟。
+
+3分钟的难受，换一份安心的报告，我觉得值。
+
+📌 为什么我推荐你也去做：
+
+1️⃣ 有痛胃镜便宜（比无痛便宜500-800块）
+2️⃣ 不用麻醉评估，预约快
+3️⃣ 做完恢复快，当天就能正常吃饭
+4️⃣ 最重要的是——你知道自己胃里到底什么情况
+
+🗳️ 投票：你能接受有痛胃镜吗？
+A. 能，省钱且快
+B. 不能，宁可多花点钱做无痛
+C. 还没想好
+
+评论区扣A/B/C，看看大家的选择👇
+
+❓ 求助：做过有痛胃镜的朋友，有什么缓解难受的技巧吗？
+
+我下次复查可能还要做，想提前准备😭
+
+💾 收藏这篇，纠结的时候看看
+
+⭐ 关注我，分享更多检查的优缺点对比
+
+#有痛胃镜 #胃镜选择 #真实感受 #投票 #健康检查</div>
+        <div class="post-tags">
+          <span class="tag hot">🔥 争议性话题</span>
+          <span class="tag">投票互动</span>
+          <span class="tag">求助评论</span>
+        </div>
+        <div class="post-tip">💡 CES优化：争议性话题易引发投票+求助式评论（激发老用户分享经验）+收藏决策参考</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ===== 05 ===== -->
+  <div class="topic-block">
+    <div class="topic-header">
+      <div class="topic-no">05</div>
+      <div class="topic-info">
+        <div class="label">情感共鸣 · 共情宣言 · 全程记录</div>
+        <div class="title">一人肠胃镜全程记录，献给和我一样害怕的你</div>
+      </div>
+      <div class="topic-ref">参考赞2855 藏1281</div>
+    </div>
+    <div class="posts-row">
+
+      <div class="post-card">
+        <div class="post-version">
+          <span class="version-badge ver-a">版本 A</span>
+          <span class="version-strategy">完整日记分步骤 → 冲收藏</span>
+        </div>
+        <div class="ces-tags">
+          <span class="ces-tag ces-save">💾 收藏引导×3</span>
+          <span class="ces-tag ces-comment">💬 评论钩子×2</span>
+          <span class="ces-tag ces-follow">⭐ 关注引导</span>
+        </div>
+        <div class="post-title-box">
+          <div class="post-title-label">标题</div>
+          <div class="post-title">一人肠胃镜全程记录，献给和我一样害怕的你</div>
+        </div>
+        <div class="post-body" onclick="copyText(this)">这篇笔记，写给每一个想查又不敢查的你。
+
+📋 我的情况：
+28岁，女，一个人去做的无痛胃肠镜。
+害怕到什么程度？检查前一晚失眠到凌晨3点。
+
+【检查前1周】
+预约 → 做心电图 → 抽血 → 等结果
+💰 总费用：约1200元（胃镜+肠镜+麻醉）
+
+【检查前1天】
+低渣饮食（白粥、面条、蒸蛋）
+下午3点开始喝泻药，4升，分4次喝完
+拉了大概15次，晚上10点终于"清澈"了
+
+【检查当天】
+早上8点到医院，空腹
+换检查服 → 打留置针 → 等待叫号
+
+【检查中】
+侧躺 → 吸氧 → 麻醉推进去
+……然后就没有然后了
+
+醒来的时候，已经在观察室了。
+护士说："你睡了20分钟，睡得挺香的。"
+
+【检查后】
+报告：慢性浅表性胃炎，结肠小息肉1枚（已摘除）
+医生说："问题不大，定期复查就行。"
+
+📌 给害怕的你：
+
+我做之前搜了上百篇笔记，越看越怕。
+但做完发现——
+恐惧来自想象，不是来自检查本身。
+
+❓ 问大家：你害怕做胃肠镜吗？最怕哪个环节？
+
+我最怕的是喝泻药，结果确实是最难受的😂
+
+评论区说说你的恐惧，我们一起面对👇
+
+💾 收藏这篇，害怕的时候拿出来看看
+
+💾 收藏这篇，检查前对照准备
+
+⭐ 关注我，陪你一起面对检查
+
+#胃肠镜 #一人检查 #害怕 #全程记录 #收藏备用</div>
+        <div class="post-tags">
+          <span class="tag hot">🔥 全程记录型</span>
+          <span class="tag">收藏引导×3</span>
+          <span class="tag">共情共鸣</span>
+        </div>
+        <div class="post-tip">💡 CES优化：全程记录易收藏+恐惧共鸣引发评论+3次收藏引导（不同场景）</div>
+      </div>
+
+      <div class="post-card">
+        <div class="post-version">
+          <span class="version-badge ver-b">版本 B</span>
+          <span class="version-strategy">心理建设宣言·击中拖延 → 冲赞量</span>
+        </div>
+        <div class="ces-tags">
+          <span class="ces-tag ces-comment">💬 评论钩子×3</span>
+          <span class="ces-tag ces-follow">⭐ 关注引导</span>
+          <span class="ces-tag ces-save">💾 收藏引导</span>
+        </div>
+        <div class="post-title-box">
+          <div class="post-title-label">标题</div>
+          <div class="post-title">献给害怕做胃肠镜的你：恐惧是想象的，检查是真实的</div>
+        </div>
+        <div class="post-body" onclick="copyText(this)">我知道你在想什么。
+
+"会不会很疼？"
+"会不会查出什么问题？"
+"一个人去会不会很惨？"
+
+这些问题，我在检查前也想了整整一个月。
+
+📌 但做完之后，我想告诉你：
+
+【关于疼痛】
+无痛真的不疼，你只是睡了一觉。
+有痛会难受，但也就3-5分钟，可以忍受。
+
+【关于结果】
+查出来问题，是幸运的——早发现早处理。
+查出来没问题，也是幸运的——可以安心了。
+
+【关于一个人】
+一个人去确实有点孤独，但护士和医生都很温柔。
+而且，一个人做完，会觉得自己挺厉害的。
+
+❓ 问大家：你拖延做检查的最大原因是什么？
+
+A. 怕疼
+B. 怕查出问题
+C. 不知道去哪做
+D. 一个人不敢去
+
+评论区扣A/B/C/D，让我看看哪个原因最多👇
+
+❓ 再问：如果你朋友也害怕，你会怎么鼓励TA？
+
+评论区分享你的"鼓励话术"，互相打气💪
+
+💾 收藏这篇，想退缩的时候看看
+
+⭐ 关注我，陪你一起面对恐惧
+
+#胃肠镜 #克服恐惧 #心理建设 #拖延症 #健康检查</div>
+        <div class="post-tags">
+          <span class="tag hot">🔥 宣言式共鸣</span>
+          <span class="tag">评论钩子×3</span>
+          <span class="tag">投票互动</span>
+        </div>
+        <div class="post-tip">💡 CES优化：宣言式内容易引发认同+投票互动（易参与）+求助式评论（鼓励话术）</div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  共 10 篇帖子正文 · 情感共鸣类 01–05 · CES优化版<br>
+  强化评论×4 收藏×1 关注×8权重 · 点击正文区域可一键复制
+</footer>
+
+<script>
+function copyText(el) {
+  const text = el.innerText.replace('点击复制','').replace('✓ 已复制','').trim();
+  navigator.clipboard.writeText(text).then(() => {
+    el.classList.add('copied');
+    setTimeout(() => el.classList.remove('copied'), 2000);
+  }).catch(() => {
+    const ta = document.createElement('textarea');
+    ta.value = text; document.body.appendChild(ta);
+    ta.select(); document.execCommand('copy');
+    document.body.removeChild(ta);
+    el.classList.add('copied');
+    setTimeout(() => el.classList.remove('copied'), 2000);
+  });
+}
+</script>
+</body>
+</html>
