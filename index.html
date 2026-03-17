@@ -108,6 +108,8 @@ body {
 .dot-3 { background: linear-gradient(135deg, #4a6cf7, #818cf8); }
 .dot-4 { background: linear-gradient(135deg, #f97316, #fb923c); }
 .dot-5 { background: linear-gradient(135deg, #ec4899, #f472b6); }
+.dot-6 { background: linear-gradient(135deg, #8b5cf6, #a78bfa); }
+.dot-7 { background: linear-gradient(135deg, #14b8a6, #2dd4bf); }
 
 /* 步骤卡片 */
 .step-card {
@@ -201,6 +203,16 @@ body {
 .c5 .step-card:hover { border-color: rgba(236,72,153,.5); box-shadow: 0 16px 48px rgba(236,72,153,.12); }
 .c5 .open-btn:hover { background: rgba(236,72,153,.12); border-color: rgba(236,72,153,.4); }
 
+.c6 .step-phase, .c6 .result-item .rn { color: #a78bfa; }
+.c6 .step-card { border-color: rgba(167,139,250,.2); }
+.c6 .step-card:hover { border-color: rgba(167,139,250,.5); box-shadow: 0 16px 48px rgba(167,139,250,.12); }
+.c6 .open-btn:hover { background: rgba(167,139,250,.12); border-color: rgba(167,139,250,.4); }
+
+.c7 .step-phase, .c7 .result-item .rn { color: #2dd4bf; }
+.c7 .step-card { border-color: rgba(45,212,191,.2); }
+.c7 .step-card:hover { border-color: rgba(45,212,191,.5); box-shadow: 0 16px 48px rgba(45,212,191,.12); }
+.c7 .open-btn:hover { background: rgba(45,212,191,.12); border-color: rgba(45,212,191,.4); }
+
 /* ── 思路总结 ── */
 .summary {
   max-width: 860px; margin: 0 auto 60px;
@@ -262,7 +274,7 @@ footer { text-align: center; padding: 32px; color: rgba(255,255,255,.2); font-si
       <div class="hero-stat"><div class="n">568</div><div class="l">采集帖子总量</div></div>
       <div class="hero-stat"><div class="n">6</div><div class="l">覆盖城市</div></div>
       <div class="hero-stat"><div class="n">50</div><div class="l">策划选题数</div></div>
-      <div class="hero-stat"><div class="n">24</div><div class="l">已产出正文篇数</div></div>
+      <div class="hero-stat"><div class="n">48</div><div class="l">已产出正文篇数</div></div>
     </div>
   </div>
 </div>
@@ -384,6 +396,7 @@ footer { text-align: center; padding: 32px; color: rgba(255,255,255,.2); font-si
   <!-- STEP 5 -->
   <div class="step c5">
     <div class="step-dot dot-5">5</div>
+    <div style="width:calc(50% - 44px);"></div>
     <a class="step-card" href="xhs_emotion_posts2.html" target="_blank">
       <div class="step-phase">PHASE 5 · 正文创作（精写版·第二批）</div>
       <div class="step-title">情感共鸣类 · 06–12 · 14篇完整正文</div>
@@ -408,7 +421,62 @@ footer { text-align: center; padding: 32px; color: rgba(255,255,255,.2); font-si
       <br>
       <span class="open-btn">打开第二批正文 →</span>
     </a>
+  </div>
+
+  <!-- STEP 6 -->
+  <div class="step c6">
+    <div class="step-dot dot-6">6</div>
+    <a class="step-card" href="xhs_emotion_posts_optimized.html" target="_blank">
+      <div class="step-phase">PHASE 6 · CES优化版（第一批）</div>
+      <div class="step-title">情感共鸣类 · 01–05 · 10篇CES优化正文</div>
+      <div class="step-file">xhs_emotion_posts_optimized.html</div>
+      <div class="step-desc">
+        基于CES评分公式深度优化：评论钩子×4、收藏引导×1、关注引导×8。每篇增加2-3个互动钩子、强化收藏引导、必加关注引导。针对流量池晋级机制优化，提升冷启动成功率。
+      </div>
+      <div class="step-tags">
+        <span class="step-tag">评论权重×4</span>
+        <span class="step-tag">收藏权重×1</span>
+        <span class="step-tag">关注权重×8</span>
+        <span class="step-tag">流量池晋级</span>
+        <span class="step-tag">冷启动优化</span>
+      </div>
+      <div class="step-results">
+        <div class="result-item"><div class="rn">10</div><div class="rl">CES优化正文</div></div>
+        <div class="result-item"><div class="rn">2-3个</div><div class="rl">评论钩子/篇</div></div>
+        <div class="result-item"><div class="rn">必加</div><div class="rl">关注引导</div></div>
+      </div>
+      <br>
+      <span class="open-btn">打开CES优化版① →</span>
+    </a>
     <div style="width:calc(50% - 44px);"></div>
+  </div>
+
+  <!-- STEP 7 -->
+  <div class="step c7">
+    <div class="step-dot dot-7">7</div>
+    <div style="width:calc(50% - 44px);"></div>
+    <a class="step-card" href="xhs_emotion_posts2_optimized.html" target="_blank">
+      <div class="step-phase">PHASE 7 · CES优化版（第二批）</div>
+      <div class="step-title">情感共鸣类 · 06–12 · 14篇CES优化正文</div>
+      <div class="step-file">xhs_emotion_posts2_optimized.html</div>
+      <div class="step-desc">
+        第二批14篇CES优化版，延续第一批优化策略。针对30岁健康焦虑、泻药准备、陪父母检查、息肉反转、7年经验、麻醉风险、胶囊胃镜等选题，全面升级互动钩子和转化引导。
+      </div>
+      <div class="step-tags">
+        <span class="step-tag">评论权重×4</span>
+        <span class="step-tag">收藏权重×1</span>
+        <span class="step-tag">关注权重×8</span>
+        <span class="step-tag">互动多样化</span>
+        <span class="step-tag">CTR优化</span>
+      </div>
+      <div class="step-results">
+        <div class="result-item"><div class="rn">14</div><div class="rl">CES优化正文</div></div>
+        <div class="result-item"><div class="rn">24</div><div class="rl">总计优化篇数</div></div>
+        <div class="result-item"><div class="rn">晋级</div><div class="rl">流量池优化</div></div>
+      </div>
+      <br>
+      <span class="open-btn">打开CES优化版② →</span>
+    </a>
   </div>
 
 </div>
