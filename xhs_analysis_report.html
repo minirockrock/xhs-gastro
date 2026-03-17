@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>小红书胃肠镜内容分析报告 v2.0</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif; background: #f0f2f5; color: #1a1a2e; }
+  
+  .header { background: linear-gradient(135deg, #ff2442 0%, #ff6b8a 50%, #ffb3c1 100%); color: white; padding: 40px 24px 50px; text-align: center; position: relative; overflow: hidden; }
+  .header::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%); }
+  .header h1 { font-size: 28px; font-weight: 800; margin-bottom: 8px; }
+  .header p { font-size: 14px; opacity: 0.9; }
+  .badge { display: inline-block; background: rgba(255,255,255,0.25); border: 1px solid rgba(255,255,255,0.4); padding: 4px 12px; border-radius: 20px; font-size: 12px; margin-top: 10px; margin-right: 6px; }
+
+  .container { max-width: 900px; margin: -20px auto 40px; padding: 0 16px; }
+
+  .card { background: white; border-radius: 16px; padding: 24px; margin-bottom: 20px; box-shadow: 0 2px 16px rgba(0,0,0,0.06); }
+  .card-title { font-size: 18px; font-weight: 700; color: #1a1a2e; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+  .card-title .icon { font-size: 20px; }
+
+  .stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .stat-item { background: #fff5f7; border-radius: 12px; padding: 16px; text-align: center; }
+  .stat-item .num { font-size: 28px; font-weight: 800; color: #ff2442; }
+  .stat-item .label { font-size: 12px; color: #888; margin-top: 4px; }
+
+  .insight-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+  .insight-card { border-radius: 12px; padding: 18px; }
+  .insight-card.red { background: linear-gradient(135deg, #fff0f3, #ffe5ea); border-left: 4px solid #ff2442; }
+  .insight-card.blue { background: linear-gradient(135deg, #f0f4ff, #e5edff); border-left: 4px solid #4a6cf7; }
+  .insight-card.green { background: linear-gradient(135deg, #f0fff4, #e5ffe9); border-left: 4px solid #22c55e; }
+  .insight-card h4 { font-size: 14px; font-weight: 700; margin-bottom: 8px; }
+  .insight-card .big { font-size: 28px; font-weight: 800; margin-bottom: 4px; }
+  .insight-card .desc { font-size: 12px; color: #555; line-height: 1.6; }
+  .insight-card.red h4 { color: #ff2442; }
+  .insight-card.blue h4 { color: #4a6cf7; }
+  .insight-card.green h4 { color: #22c55e; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { background: #f8f9fc; padding: 10px 12px; text-align: left; font-weight: 600; color: #555; border-bottom: 2px solid #eee; }
+  td { padding: 10px 12px; border-bottom: 1px solid #f0f0f0; vertical-align: top; }
+  tr:hover td { background: #fafbff; }
+  .rank { font-weight: 700; color: #ff2442; width: 30px; }
+  .city-tag { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 600; }
+  .city-sh { background: #fff0e6; color: #f97316; }
+  .city-wx { background: #e6f0ff; color: #3b82f6; }
+  .city-sz { background: #f0ffe6; color: #22c55e; }
+  .city-cz { background: #f5e6ff; color: #a855f7; }
+  .city-qt { background: #f0f0f0; color: #666; }
+  .num-like { color: #ff2442; font-weight: 700; }
+  .num-cmt  { color: #4a6cf7; font-weight: 700; }
+  .num-col  { color: #22c55e; font-weight: 700; }
+
+  .city-bar-wrap { display: flex; flex-direction: column; gap: 10px; }
+  .city-bar-row { display: flex; align-items: center; gap: 10px; }
+  .city-bar-row .name { width: 40px; font-size: 13px; font-weight: 600; }
+  .city-bar-row .bar-bg { flex: 1; background: #f0f2f5; border-radius: 6px; height: 20px; overflow: hidden; }
+  .city-bar-row .bar { height: 100%; border-radius: 6px; display: flex; align-items: center; justify-content: flex-end; padding-right: 8px; font-size: 11px; color: white; font-weight: 600; transition: width 0.8s ease; }
+  .city-bar-row .stat { font-size: 12px; color: #888; width: 90px; text-align: right; }
+
+  .kw-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .kw-item { background: #f8f9fc; border-radius: 10px; padding: 12px; }
+  .kw-item .word { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+  .kw-item .kw-num { font-size: 20px; font-weight: 800; color: #ff2442; }
+  .kw-item .kw-label { font-size: 11px; color: #888; }
+
+  .template-list { display: flex; flex-direction: column; gap: 10px; }
+  .tpl-item { background: #fff5f7; border-radius: 10px; padding: 14px; border-left: 4px solid #ff2442; }
+  .tpl-item .tpl-type { font-size: 11px; color: #ff2442; font-weight: 600; margin-bottom: 6px; }
+  .tpl-item .tpl-title { font-size: 14px; font-weight: 600; color: #1a1a2e; margin-bottom: 4px; }
+  .tpl-item .tpl-why { font-size: 12px; color: #666; }
+
+  .strategy-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .strategy-item { background: #f8f9fc; border-radius: 12px; padding: 16px; }
+  .strategy-item h4 { font-size: 14px; font-weight: 700; color: #1a1a2e; margin-bottom: 8px; }
+  .strategy-item ul { list-style: none; padding: 0; }
+  .strategy-item ul li { font-size: 13px; color: #444; padding: 3px 0; padding-left: 16px; position: relative; line-height: 1.6; }
+  .strategy-item ul li::before { content: '✓'; position: absolute; left: 0; color: #22c55e; font-weight: 700; }
+
+  .section-tag { display: inline-block; background: #ff2442; color: white; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 6px; margin-bottom: 12px; }
+
+  .top-post { background: #f8f9fc; border-radius: 10px; padding: 12px 14px; margin-bottom: 8px; }
+  .top-post .tp-title { font-size: 14px; font-weight: 600; color: #1a1a2e; margin-bottom: 6px; }
+  .top-post .tp-meta { font-size: 12px; color: #888; display: flex; gap: 12px; flex-wrap: wrap; }
+  .top-post .tp-meta span { display: flex; align-items: center; gap: 3px; }
+  .top-post .tp-why { font-size: 12px; color: #555; margin-top: 6px; background: white; border-radius: 6px; padding: 6px 10px; line-height: 1.6; }
+
+  .sh-highlight { background: linear-gradient(135deg, #fff8f0, #fff3e6); border: 1px solid #fed7aa; border-radius: 12px; padding: 16px; margin-bottom: 12px; }
+  .sh-highlight h4 { color: #f97316; font-size: 15px; margin-bottom: 10px; }
+
+  .compare-table th { background: #fff5f7; }
+  .highlight-row td { background: #fff8f0 !important; font-weight: 600; }
+
+  footer { text-align: center; padding: 30px; color: #aaa; font-size: 12px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>🔍 小红书胃肠镜内容分析报告</h1>
+  <p>基于真实数据，解码爆款规律，指导内容仿写</p>
+  <div style="margin-top: 12px;">
+    <span class="badge">📊 568条有效帖子</span>
+    <span class="badge">🏙️ 6城市覆盖</span>
+    <span class="badge">v2.0 新增上海数据</span>
+    <span class="badge">2026年3月</span>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- 总览数据 -->
+  <div class="card">
+    <div class="card-title"><span class="icon">📈</span>数据总览</div>
+    <div class="stat-grid">
+      <div class="stat-item">
+        <div class="num">568</div>
+        <div class="label">有效帖子</div>
+      </div>
+      <div class="stat-item">
+        <div class="num">6</div>
+        <div class="label">覆盖城市</div>
+      </div>
+      <div class="stat-item">
+        <div class="num">41,670</div>
+        <div class="label">单篇最高赞</div>
+      </div>
+      <div class="stat-item">
+        <div class="num">13,090</div>
+        <div class="label">单篇最高收藏</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 三大核心发现 -->
+  <div class="card">
+    <div class="card-title"><span class="icon">💡</span>三大核心发现</div>
+    <div class="insight-grid">
+      <div class="insight-card red">
+        <h4>❤️ 为什么点赞高</h4>
+        <div class="big">情感共鸣</div>
+        <div class="desc">
+          含「有痛」的帖子均赞 <strong>8503</strong>，是全库均值的17倍。<br><br>
+          用户被真实的恐惧感与安慰感触动，第一人称亲历帖天然自带情绪穿透力。<br><br>
+          "一个人去做胃镜" = 孤独感引发广泛共鸣（41,670赞）
+        </div>
+      </div>
+      <div class="insight-card blue">
+        <h4>💬 为什么评论高</h4>
+        <div class="big">互动欲望</div>
+        <div class="desc">
+          「第一次」类帖子均赞 <strong>3087</strong>，评论率最高。<br><br>
+          负面遭遇（穿孔、进ICU）让读者感同身受，评论区变成集体诉说的地方。<br><br>
+          开放式问题（"全麻后会乱说话吗？"）让每个人都想回答。
+        </div>
+      </div>
+      <div class="insight-card green">
+        <h4>🔖 为什么收藏高</h4>
+        <div class="big">实用价值</div>
+        <div class="desc">
+          上海中山医院攻略帖收藏 <strong>5,228</strong>，赞/藏比接近 1:2（藏多于赞）。<br><br>
+          含「流程/攻略」的帖子均收藏远高于均点赞——用户收藏的是"工具"不是"内容"。<br><br>
+          以医院为核心的完整攻略，收藏价值最高。
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 城市维度分析 -->
+  <div class="card">
+    <div class="card-title"><span class="icon">🏙️</span>城市维度 — 流量差异分析</div>
+    <p style="font-size:13px;color:#666;margin-bottom:16px;">「其他」=标题/作者未出现城市名，多为全国性科普博主</p>
+    <div class="city-bar-wrap">
+      <div class="city-bar-row">
+        <div class="name">其他</div>
+        <div class="bar-bg"><div class="bar" style="width:100%;background:linear-gradient(90deg,#ff2442,#ff6b8a)">1217</div></div>
+        <div class="stat">均赞 1217 均藏 473</div>
+      </div>
+      <div class="city-bar-row">
+        <div class="name">上海</div>
+        <div class="bar-bg"><div class="bar" style="width:18%;background:linear-gradient(90deg,#f97316,#fbbf24)">218</div></div>
+        <div class="stat">均赞 218 均藏 249</div>
+      </div>
+      <div class="city-bar-row">
+        <div class="name">苏州</div>
+        <div class="bar-bg"><div class="bar" style="width:6.5%;background:linear-gradient(90deg,#22c55e,#4ade80)">79</div></div>
+        <div class="stat">均赞 79 均藏 62</div>
+      </div>
+      <div class="city-bar-row">
+        <div class="name">无锡</div>
+        <div class="bar-bg"><div class="bar" style="width:5%;background:linear-gradient(90deg,#3b82f6,#60a5fa)">61</div></div>
+        <div class="stat">均赞 61 均藏 41</div>
+      </div>
+      <div class="city-bar-row">
+        <div class="name">常州</div>
+        <div class="bar-bg"><div class="bar" style="width:1.8%;background:#a855f7">22</div></div>
+        <div class="stat">均赞 22 均藏 21</div>
+      </div>
+      <div class="city-bar-row">
+        <div class="name">宜兴</div>
+        <div class="bar-bg"><div class="bar" style="width:0.6%;background:#94a3b8">7</div></div>
+        <div class="stat">均赞 7 均藏 4</div>
+      </div>
+    </div>
+    <div style="margin-top:16px;padding:12px;background:#fff5f7;border-radius:10px;font-size:13px;color:#444;line-height:1.8;">
+      ⚠️ <strong>关键结论：</strong>上海流量 = 无锡的 <strong>3.6倍</strong>，苏州的 <strong>2.8倍</strong>。上海用户基数大、攻略需求强烈，是当前最值得布局的城市。<br>
+      但「其他」（泛科普）均赞是上海本地内容的 <strong>5.6倍</strong>，说明不绑定城市的通用科普内容，天花板更高。
+    </div>
+  </div>
+
+  <!-- 上海专项分析 -->
+  <div class="card">
+    <div class="card-title"><span class="icon">🌆</span>上海专项分析 — 新增城市深度解读</div>
+    
+    <div class="sh-highlight">
+      <h4>🏆 上海TOP3爆款帖子解析</h4>
+      
+      <div class="top-post">
+        <div class="tp-title">① 中山医院肠胃镜检查（最适合上班族的攻略）</div>
+        <div class="tp-meta">
+          <span>❤️ 3,366赞</span>
+          <span>🔖 5,228收藏</span>
+          <span>💬 641评论</span>
+          <span><span class="city-tag city-sh">上海</span></span>
+        </div>
+        <div class="tp-why">💡 <strong>为什么爆？</strong> "最适合上班族"精准定位焦虑人群（上班族=最怕请假）+ 中山医院是上海胃肠镜的头牌医院，品牌背书强。攻略帖天然收藏率高，收藏量是点赞的1.5倍。</div>
+      </div>
+
+      <div class="top-post">
+        <div class="tp-title">② 无痛胃肠镜1小时完成预约上海仁济-详细大全</div>
+        <div class="tp-meta">
+          <span>❤️ 2,572赞</span>
+          <span>🔖 3,997收藏</span>
+          <span>💬 791评论</span>
+          <span><span class="city-tag city-sh">上海</span></span>
+        </div>
+        <div class="tp-why">💡 <strong>为什么爆？</strong> "1小时"解决了上海人最痛的点：时间。"详细大全"承诺了完整性。仁济医院是上海网红胃肠镜医院，用户主动搜索量大。</div>
+      </div>
+
+      <div class="top-post">
+        <div class="tp-title">③ 在上海做了个胃镜</div>
+        <div class="tp-meta">
+          <span>❤️ 2,761赞</span>
+          <span>🔖 250收藏</span>
+          <span>💬 354评论</span>
+          <span><span class="city-tag city-sh">上海</span></span>
+        </div>
+        <div class="tp-why">💡 <strong>为什么爆？</strong> 极度简洁的标题反而制造悬念，是典型的"情绪流"帖子——赞高但收藏低，说明用户看完情绪共鸣但无实用价值留存。</div>
+      </div>
+    </div>
+
+    <div class="card-title" style="margin-top:16px;font-size:15px;">上海医院流量对比</div>
+    <table class="compare-table">
+      <thead><tr><th>医院</th><th>相关帖子</th><th>均赞</th><th>均收藏</th><th>核心标签</th></tr></thead>
+      <tbody>
+        <tr class="highlight-row"><td>中山医院</td><td>27条</td><td class="num-like">334</td><td class="num-col">495</td><td>攻略 / 上班族 / 流程全</td></tr>
+        <tr><td>仁济医院</td><td>37条</td><td class="num-like">191</td><td class="num-col">260</td><td>预约快 / 无痛 / 全流程</td></tr>
+        <tr><td>瑞金医院</td><td>13条</td><td class="num-like">217</td><td class="num-col">362</td><td>新设备 / 专家坑 / 豪华</td></tr>
+        <tr><td>复旦系</td><td>5条</td><td class="num-like">152</td><td class="num-col">209</td><td>中山/华山</td></tr>
+        <tr><td>东方医院</td><td>5条</td><td class="num-like">27</td><td class="num-col">14</td><td>浦东 / 需要更多内容</td></tr>
+      </tbody>
+    </table>
+    <div style="margin-top:10px;font-size:12px;color:#666;padding:10px;background:#f8f9fc;border-radius:8px;">
+      📌 上海内容策略：<strong>优先选中山/仁济/瑞金</strong>做攻略帖，这三家医院自带搜索流量。可复制无锡成功的「某院无痛胃肠镜体验」模板，加「上班族」「最快」「最全」等标签词。
+    </div>
+  </div>
+
+  <!-- 标题关键词分析 -->
+  <div class="card">
+    <div class="card-title"><span class="icon">🔑</span>标题关键词 — 平均点赞对比</div>
+    <div class="kw-grid">
+      <div class="kw-item" style="background:linear-gradient(135deg,#fff0f3,#ffe5ea);">
+        <div class="word">🔥 有痛</div>
+        <div class="kw-num">8,503</div>
+        <div class="kw-label">均赞（5条）</div>
+      </div>
+      <div class="kw-item" style="background:linear-gradient(135deg,#fff5e6,#ffe8cc);">
+        <div class="word">🔥 第一次</div>
+        <div class="kw-num">3,087</div>
+        <div class="kw-label">均赞（9条）</div>
+      </div>
+      <div class="kw-item" style="background:linear-gradient(135deg,#fff5f7,#ffeaf0);">
+        <div class="word">🔥 注意</div>
+        <div class="kw-num">1,013</div>
+        <div class="kw-label">均赞（6条）</div>
+      </div>
+      <div class="kw-item" style="background:linear-gradient(135deg,#fff5f7,#ffeaf0);">
+        <div class="word">⚠️ 癌</div>
+        <div class="kw-num">806</div>
+        <div class="kw-label">均赞（12条）</div>
+      </div>
+      <div class="kw-item">
+        <div class="word">胃镜</div>
+        <div class="kw-num">723</div>
+        <div class="kw-label">均赞（163条）</div>
+      </div>
+      <div class="kw-item">
+        <div class="word">流程</div>
+        <div class="kw-num">635</div>
+        <div class="kw-label">均赞（36条）</div>
+      </div>
+      <div class="kw-item">
+        <div class="word">无痛</div>
+        <div class="kw-num">455</div>
+        <div class="kw-label">均赞（128条）</div>
+      </div>
+      <div class="kw-item">
+        <div class="word">中山</div>
+        <div class="kw-num">353</div>
+        <div class="kw-label">均赞（25条）</div>
+      </div>
+      <div class="kw-item">
+        <div class="word">预约</div>
+        <div class="kw-num">322</div>
+        <div class="kw-label">均赞（14条）</div>
+      </div>
+      <div class="kw-item">
+        <div class="word">体验</div>
+        <div class="kw-num">309</div>
+        <div class="kw-label">均赞（10条）</div>
+      </div>
+      <div class="kw-item">
+        <div class="word">攻略</div>
+        <div class="kw-num">285</div>
+        <div class="kw-label">均赞（26条）</div>
+      </div>
+      <div class="kw-item" style="background:#f0f2f5;">
+        <div class="word" style="color:#888;">医院</div>
+        <div class="kw-num" style="color:#888;">160</div>
+        <div class="kw-label">均赞（109条）</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 全库点赞TOP榜 -->
+  <div class="card">
+    <div class="card-title"><span class="icon">❤️</span>全库点赞 TOP15 — 爆款帖子解析</div>
+    <table>
+      <thead><tr><th>#</th><th>城市</th><th>标题</th><th>赞</th><th>评</th><th>藏</th><th>为什么爆</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="rank">1</td>
+          <td><span class="city-tag city-qt">泛科普</span></td>
+          <td>关于我一个人去做了有痛胃镜</td>
+          <td class="num-like">41,670</td><td class="num-cmt">2,658</td><td class="num-col">3,301</td>
+          <td style="font-size:12px;color:#555;">孤独感+勇气叙事，情绪共鸣极强</td>
+        </tr>
+        <tr>
+          <td class="rank">2</td>
+          <td><span class="city-tag city-qt">泛科普</span></td>
+          <td>第一次无痛肠胃镜，全麻后真的会乱说话吗？</td>
+          <td class="num-like">22,723</td><td class="num-cmt">1,769</td><td class="num-col">4,576</td>
+          <td style="font-size:12px;color:#555;">悬念式问题，消除常见顾虑</td>
+        </tr>
+        <tr>
+          <td class="rank">3</td>
+          <td><span class="city-tag city-qt">泛科普</span></td>
+          <td>（全流程攻略）</td>
+          <td class="num-like">16,415</td><td class="num-cmt">1,607</td><td class="num-col">13,090</td>
+          <td style="font-size:12px;color:#555;">收藏最高，超实用工具型内容</td>
+        </tr>
+        <tr>
+          <td class="rank">4</td>
+          <td><span class="city-tag city-qt">泛科普</span></td>
+          <td>钢门像失控的水龙头-肠镜（上）</td>
+          <td class="num-like">10,529</td><td class="num-cmt">586</td><td class="num-col">3,598</td>
+          <td style="font-size:12px;color:#555;">比喻奇特，标题制造强烈画面感</td>
+        </tr>
+        <tr>
+          <td class="rank">5</td>
+          <td><span class="city-tag city-qt">泛科普</span></td>
+          <td>无痛肠胃镜检查注意事项、流程、正确体位</td>
+          <td class="num-like">5,943</td><td class="num-cmt">312</td><td class="num-col">2,741</td>
+          <td style="font-size:12px;color:#555;">「正确体位」关键词触发强需求</td>
+        </tr>
+        <tr>
+          <td class="rank">6</td>
+          <td><span class="city-tag city-qt">泛科普</span></td>
+          <td>胃肠镜检查全流程</td>
+          <td class="num-like">5,111</td><td class="num-cmt">212</td><td class="num-col">3,584</td>
+          <td style="font-size:12px;color:#555;">极简标题，搜索精准流量</td>
+        </tr>
+        <tr>
+          <td class="rank">7</td>
+          <td><span class="city-tag city-qt">泛科普</span></td>
+          <td>无痛胃肠镜全流程（中）</td>
+          <td class="num-like">4,969</td><td class="num-cmt">489</td><td class="num-col">5,191</td>
+          <td style="font-size:12px;color:#555;">系列帖，藏量超赞量</td>
+        </tr>
+        <tr>
+          <td class="rank">8</td>
+          <td><span class="city-tag city-qt">泛科普</span></td>
+          <td>第一次无痛肠胃镜安全下车</td>
+          <td class="num-like">3,991</td><td class="num-cmt">2,314</td><td class="num-col">1,434</td>
+          <td style="font-size:12px;color:#555;">「安全下车」=术语引发评论共鸣</td>
+        </tr>
+        <tr>
+          <td class="rank">9</td>
+          <td><span class="city-tag city-qt">泛科普</span></td>
+          <td>普通人真的不要做普通胃镜！</td>
+          <td class="num-like">3,731</td><td class="num-cmt">2,672</td><td class="num-col">1,071</td>
+          <td style="font-size:12px;color:#555;">强警告式标题，触发强烈讨论</td>
+        </tr>
+        <tr>
+          <td class="rank">10</td>
+          <td><span class="city-tag city-sh">上海</span></td>
+          <td>中山医院肠胃镜检查（最适合上班族的攻略）</td>
+          <td class="num-like">3,366</td><td class="num-cmt">641</td><td class="num-col">5,228</td>
+          <td style="font-size:12px;color:#555;">人群精准+医院背书+攻略收藏高</td>
+        </tr>
+        <tr>
+          <td class="rank">11</td>
+          <td><span class="city-tag city-qt">泛科普</span></td>
+          <td>要做无痛胃肠镜的一定要像我这样做</td>
+          <td class="num-like">3,049</td><td class="num-cmt">2,047</td><td class="num-col">1,890</td>
+          <td style="font-size:12px;color:#555;">「一定要这样做」制造权威感</td>
+        </tr>
+        <tr>
+          <td class="rank">12</td>
+          <td><span class="city-tag city-sh">上海</span></td>
+          <td>在上海做了个胃镜</td>
+          <td class="num-like">2,761</td><td class="num-cmt">354</td><td class="num-col">250</td>
+          <td style="font-size:12px;color:#555;">极简标题悬念，情绪流驱动</td>
+        </tr>
+        <tr>
+          <td class="rank">13</td>
+          <td><span class="city-tag city-sh">上海</span></td>
+          <td>无痛胃肠镜1小时完成预约上海仁济-详细大全</td>
+          <td class="num-like">2,572</td><td class="num-cmt">791</td><td class="num-col">3,997</td>
+          <td style="font-size:12px;color:#555;">时间量化+医院名+大全，实用性极强</td>
+        </tr>
+        <tr>
+          <td class="rank">14</td>
+          <td><span class="city-tag city-qt">泛科普</span></td>
+          <td>肠镜检查 穿孔了</td>
+          <td class="num-like">2,415</td><td class="num-cmt">1,339</td><td class="num-col">312</td>
+          <td style="font-size:12px;color:#555;">极度恐惧感，引发同情和讨论</td>
+        </tr>
+        <tr>
+          <td class="rank">15</td>
+          <td><span class="city-tag city-wx">无锡</span></td>
+          <td>这6种人最好马上去做胃镜</td>
+          <td class="num-like">819</td><td class="num-cmt">1,541</td><td class="num-col">201</td>
+          <td style="font-size:12px;color:#555;">对号入座式标题，评论量远超点赞</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 仿写策略 -->
+  <div class="card">
+    <div class="card-title"><span class="icon">✍️</span>仿写策略 — 可直接使用</div>
+    
+    <div class="strategy-grid">
+      <div class="strategy-item" style="border-top:3px solid #ff2442;">
+        <h4>❤️ 冲赞量：情感共鸣型</h4>
+        <ul>
+          <li>第一人称真实经历，必须有情绪起伏</li>
+          <li>放大恐惧/紧张，再给出安慰/出口</li>
+          <li>「一个人」「第一次」「没人陪」等孤独词</li>
+          <li>标题控制在 <strong>11-20字</strong>，留悬念</li>
+        </ul>
+      </div>
+      <div class="strategy-item" style="border-top:3px solid #4a6cf7;">
+        <h4>💬 冲评论：互动触发型</h4>
+        <ul>
+          <li>提出一个所有人都有答案的问题</li>
+          <li>「X种人必须做」让用户对号入座</li>
+          <li>负面遭遇（副作用/收费踩坑）引发讨论</li>
+          <li>结尾设置"你经历过吗？"的钩子</li>
+        </ul>
+      </div>
+      <div class="strategy-item" style="border-top:3px solid #22c55e;">
+        <h4>🔖 冲收藏：工具实用型</h4>
+        <ul>
+          <li>「完整流程/全攻略/详细大全」必不可少</li>
+          <li>绑定具体医院，最好是头部知名医院</li>
+          <li>含预约方式、注意事项、费用清单</li>
+          <li>「上班族」「省时」「省钱」等场景词</li>
+        </ul>
+      </div>
+      <div class="strategy-item" style="border-top:3px solid #f97316;">
+        <h4>🌆 上海专属策略</h4>
+        <ul>
+          <li>优先绑定：中山 > 仁济 > 瑞金</li>
+          <li>「1小时」「最快」「最省心」量化时间</li>
+          <li>「上班族」「白领」「打工人」精准人群</li>
+          <li>可借鉴无锡打法：医生 IP + 亲历体验</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 标题模板 -->
+  <div class="card">
+    <div class="card-title"><span class="icon">📝</span>25条可直接使用的标题模板</div>
+    
+    <div class="section-tag">情感共鸣型（冲赞量）</div>
+    <div class="template-list" style="margin-bottom:16px;">
+      <div class="tpl-item">
+        <div class="tpl-type">模板 A1</div>
+        <div class="tpl-title">关于我一个人去[城市]做了有痛/无痛胃肠镜</div>
+        <div class="tpl-why">👉 仿写爆款公式，孤独感触发共鸣</div>
+      </div>
+      <div class="tpl-item">
+        <div class="tpl-type">模板 A2</div>
+        <div class="tpl-title">第一次做胃肠镜，全麻后[城市]医院这样待我</div>
+        <div class="tpl-why">👉 「第一次」+城市，情绪+地域双钩</div>
+      </div>
+      <div class="tpl-item">
+        <div class="tpl-type">模板 A3</div>
+        <div class="tpl-title">在[上海/无锡]做了个胃镜，有些话想说</div>
+        <div class="tpl-why">👉 极简悬念型，低门槛高好奇心</div>
+      </div>
+      <div class="tpl-item">
+        <div class="tpl-type">模板 A4</div>
+        <div class="tpl-title">胃镜把我做哭了，但[城市]这家医院让我感动</div>
+        <div class="tpl-why">👉 情绪反转，从负到正，正向植入</div>
+      </div>
+    </div>
+
+    <div class="section-tag">实用攻略型（冲收藏）</div>
+    <div class="template-list" style="margin-bottom:16px;">
+      <div class="tpl-item">
+        <div class="tpl-type">模板 B1</div>
+        <div class="tpl-title">[上海中山/仁济/瑞金]胃肠镜检查全攻略（最适合上班族）</div>
+        <div class="tpl-why">👉 直接仿写上海TOP1，换医院名即可</div>
+      </div>
+      <div class="tpl-item">
+        <div class="tpl-type">模板 B2</div>
+        <div class="tpl-title">无痛胃肠镜预约+检查+报告，[X小时]全搞定！[城市]攻略</div>
+        <div class="tpl-why">👉 时间量化，上班族最爱收藏</div>
+      </div>
+      <div class="tpl-item">
+        <div class="tpl-type">模板 B3</div>
+        <div class="tpl-title">[城市]做胃肠镜避坑指南｜这些费用可以不花！</div>
+        <div class="tpl-why">👉 「省钱」+「避坑」双驱动，收藏动力强</div>
+      </div>
+      <div class="tpl-item">
+        <div class="tpl-type">模板 B4</div>
+        <div class="tpl-title">无痛肠胃镜全流程图文详解｜[城市]版 2025最新</div>
+        <div class="tpl-why">👉 「最新」增加时效感，流程帖收藏高</div>
+      </div>
+      <div class="tpl-item">
+        <div class="tpl-type">模板 B5</div>
+        <div class="tpl-title">[城市]胃肠镜检查注意事项+正确体位+全流程</div>
+        <div class="tpl-why">👉 仿写均赞5,943的帖子，「正确体位」是高价值词</div>
+      </div>
+    </div>
+
+    <div class="section-tag">互动触发型（冲评论）</div>
+    <div class="template-list" style="margin-bottom:16px;">
+      <div class="tpl-item">
+        <div class="tpl-type">模板 C1</div>
+        <div class="tpl-title">这5种人最好马上去做胃镜！你中招了吗</div>
+        <div class="tpl-why">👉 「你中招了吗」触发对号入座，无锡爆款验证</div>
+      </div>
+      <div class="tpl-item">
+        <div class="tpl-type">模板 C2</div>
+        <div class="tpl-title">做胃肠镜前必看！全麻后真的会乱说话？</div>
+        <div class="tpl-why">👉 消除顾虑+悬念问句，人人都想知道答案</div>
+      </div>
+      <div class="tpl-item">
+        <div class="tpl-type">模板 C3</div>
+        <div class="tpl-title">普通人真的不要做普通胃镜！（亲身经历）</div>
+        <div class="tpl-why">👉 强警告式，评论区会炸</div>
+      </div>
+      <div class="tpl-item">
+        <div class="tpl-type">模板 C4</div>
+        <div class="tpl-title">要做胃肠镜，一定要像我这样做！血泪教训</div>
+        <div class="tpl-why">👉 「血泪教训」触发好奇+同情</div>
+      </div>
+    </div>
+
+    <div class="section-tag">医生IP型（建立专业信任）</div>
+    <div class="template-list">
+      <div class="tpl-item">
+        <div class="tpl-type">模板 D1</div>
+        <div class="tpl-title">消化科医生说了实话：这才是做胃镜的最佳时间</div>
+        <div class="tpl-why">👉 医生视角天然权威，「实话」触发好奇</div>
+      </div>
+      <div class="tpl-item">
+        <div class="tpl-type">模板 D2</div>
+        <div class="tpl-title">[城市]胃肠镜医生：每年接诊[X]例，说几个真相</div>
+        <div class="tpl-why">👉 数量化增加可信度，「真相」触发点击</div>
+      </div>
+      <div class="tpl-item">
+        <div class="tpl-type">模板 D3</div>
+        <div class="tpl-title">做了[X]年胃肠镜，患者最常问的10个问题</div>
+        <div class="tpl-why">👉 经验量化+实用性，收藏率高</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 发帖比例建议 -->
+  <div class="card">
+    <div class="card-title"><span class="icon">📊</span>内容配比建议</div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;">
+      <div style="text-align:center;padding:20px;background:#fff0f3;border-radius:12px;">
+        <div style="font-size:32px;font-weight:800;color:#ff2442;">40%</div>
+        <div style="font-size:13px;font-weight:600;margin-top:4px;">情感经历型</div>
+        <div style="font-size:11px;color:#888;margin-top:4px;">冲赞量主力，建立亲近感</div>
+      </div>
+      <div style="text-align:center;padding:20px;background:#f0fff4;border-radius:12px;">
+        <div style="font-size:32px;font-weight:800;color:#22c55e;">30%</div>
+        <div style="font-size:13px;font-weight:600;margin-top:4px;">攻略工具型</div>
+        <div style="font-size:11px;color:#888;margin-top:4px;">冲收藏，留存用户</div>
+      </div>
+      <div style="text-align:center;padding:20px;background:#f0f4ff;border-radius:12px;">
+        <div style="font-size:32px;font-weight:800;color:#4a6cf7;">20%</div>
+        <div style="font-size:13px;font-weight:600;margin-top:4px;">科普互动型</div>
+        <div style="font-size:11px;color:#888;margin-top:4px;">冲评论，活跃账号</div>
+      </div>
+      <div style="text-align:center;padding:20px;background:#fff8f0;border-radius:12px;">
+        <div style="font-size:32px;font-weight:800;color:#f97316;">≤10%</div>
+        <div style="font-size:13px;font-weight:600;margin-top:4px;">品牌植入型</div>
+        <div style="font-size:11px;color:#888;margin-top:4px;">点到为止，不影响信任</div>
+      </div>
+    </div>
+    <div style="margin-top:14px;padding:14px;background:#f8f9fc;border-radius:10px;font-size:13px;color:#444;line-height:1.8;">
+      <strong>城市布局优先级：</strong>上海（流量最大）> 苏州 > 无锡 > 常州 > 宜兴/江阴<br>
+      <strong>内容形式：</strong>图文帖（攻略/流程）适合收藏，短视频帖（经历/情绪）适合赞/评。<br>
+      <strong>发布节奏：</strong>工作日早8-9点、晚8-10点；周末全天均可。
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  数据来源：小红书公开内容 | 分析帖子：568条 | 覆盖城市：无锡、江阴、宜兴、常州、苏州、上海<br>
+  生成时间：2026年3月 | 仅供内容创作参考
+</footer>
+
+</body>
+</html>

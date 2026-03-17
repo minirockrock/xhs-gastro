@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>小红书胃肠镜内容项目 · 全局回溯</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+  background: #0f0f1a;
+  color: #e8e8f0;
+  min-height: 100vh;
+}
+
+/* ── 顶部 Hero ── */
+.hero {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  padding: 60px 24px 80px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 30% 40%, rgba(255,36,66,.15) 0%, transparent 60%),
+              radial-gradient(ellipse at 70% 60%, rgba(74,108,247,.15) 0%, transparent 60%);
+}
+.hero-inner { position: relative; z-index: 1; }
+.hero-tag {
+  display: inline-block;
+  background: rgba(255,36,66,.15);
+  border: 1px solid rgba(255,36,66,.4);
+  color: #ff6b6b;
+  font-size: 12px; font-weight: 700;
+  padding: 4px 14px; border-radius: 20px;
+  margin-bottom: 20px; letter-spacing: 1px;
+}
+.hero h1 {
+  font-size: 32px; font-weight: 900;
+  line-height: 1.3; margin-bottom: 14px;
+  background: linear-gradient(135deg, #fff 0%, #ff6b6b 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+.hero p {
+  font-size: 15px; color: rgba(255,255,255,.6);
+  max-width: 560px; margin: 0 auto 28px; line-height: 1.8;
+}
+.hero-stats {
+  display: flex; justify-content: center; gap: 32px; flex-wrap: wrap;
+}
+.hero-stat { text-align: center; }
+.hero-stat .n {
+  font-size: 28px; font-weight: 900;
+  background: linear-gradient(135deg, #ff2442, #ff6b6b);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+.hero-stat .l { font-size: 12px; color: rgba(255,255,255,.5); margin-top: 2px; }
+
+/* ── 时间线容器 ── */
+.timeline {
+  max-width: 860px; margin: 0 auto;
+  padding: 60px 24px 80px;
+  position: relative;
+}
+.timeline::before {
+  content: '';
+  position: absolute; left: 50%; top: 0; bottom: 0;
+  width: 2px;
+  background: linear-gradient(to bottom, transparent, rgba(255,36,66,.3) 5%, rgba(255,36,66,.3) 95%, transparent);
+  transform: translateX(-50%);
+}
+@media(max-width: 660px){
+  .timeline::before { left: 20px; }
+}
+
+/* ── 时间线节点 ── */
+.step {
+  display: flex; gap: 32px;
+  margin-bottom: 64px;
+  position: relative;
+}
+.step:nth-child(even) { flex-direction: row-reverse; }
+@media(max-width: 660px){
+  .step, .step:nth-child(even) {
+    flex-direction: column;
+    padding-left: 52px;
+  }
+}
+
+/* 节点圆圈 */
+.step-dot {
+  position: absolute; left: 50%; top: 24px;
+  transform: translateX(-50%);
+  width: 44px; height: 44px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; font-weight: 900;
+  border: 3px solid #0f0f1a;
+  z-index: 2; flex-shrink: 0;
+}
+@media(max-width: 660px){
+  .step-dot { left: 20px; transform: none; top: 0; }
+}
+
+.dot-1 { background: linear-gradient(135deg, #ff2442, #ff6b6b); }
+.dot-2 { background: linear-gradient(135deg, #22c55e, #4ade80); }
+.dot-3 { background: linear-gradient(135deg, #4a6cf7, #818cf8); }
+.dot-4 { background: linear-gradient(135deg, #f97316, #fb923c); }
+.dot-5 { background: linear-gradient(135deg, #ec4899, #f472b6); }
+
+/* 步骤卡片 */
+.step-card {
+  width: calc(50% - 44px);
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 20px; padding: 28px;
+  backdrop-filter: blur(10px);
+  transition: transform .3s, border-color .3s, box-shadow .3s;
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+.step-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(255,255,255,.2);
+  box-shadow: 0 16px 48px rgba(0,0,0,.4);
+}
+@media(max-width: 660px){
+  .step-card { width: 100%; }
+}
+
+.step-phase {
+  font-size: 11px; font-weight: 700; letter-spacing: 1px;
+  margin-bottom: 10px; opacity: .7;
+}
+.step-title {
+  font-size: 18px; font-weight: 800; margin-bottom: 8px; line-height: 1.4;
+}
+.step-file {
+  font-size: 11px; font-family: monospace;
+  background: rgba(255,255,255,.07); border-radius: 6px;
+  padding: 3px 9px; display: inline-block; margin-bottom: 14px;
+  color: rgba(255,255,255,.5);
+}
+.step-desc {
+  font-size: 13px; color: rgba(255,255,255,.6); line-height: 1.8;
+  margin-bottom: 16px;
+}
+
+/* 标签列表 */
+.step-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 18px; }
+.step-tag {
+  font-size: 11px; padding: 3px 10px; border-radius: 8px;
+  background: rgba(255,255,255,.07); color: rgba(255,255,255,.6);
+}
+
+/* 成果数字 */
+.step-results {
+  display: flex; gap: 16px; flex-wrap: wrap;
+  padding-top: 16px; border-top: 1px solid rgba(255,255,255,.07);
+}
+.result-item { text-align: center; min-width: 56px; }
+.result-item .rn { font-size: 20px; font-weight: 900; }
+.result-item .rl { font-size: 10px; color: rgba(255,255,255,.4); margin-top: 2px; }
+
+/* 打开按钮 */
+.open-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.15);
+  color: rgba(255,255,255,.8); font-size: 13px; font-weight: 600;
+  padding: 8px 18px; border-radius: 10px; text-decoration: none;
+  transition: background .2s, border-color .2s;
+}
+.open-btn:hover { background: rgba(255,255,255,.15); border-color: rgba(255,255,255,.3); }
+
+/* 颜色主题 */
+.c1 .step-phase, .c1 .result-item .rn { color: #ff6b6b; }
+.c1 .step-card { border-color: rgba(255,36,66,.2); }
+.c1 .step-card:hover { border-color: rgba(255,36,66,.5); box-shadow: 0 16px 48px rgba(255,36,66,.15); }
+.c1 .open-btn:hover { background: rgba(255,36,66,.15); border-color: rgba(255,36,66,.4); }
+
+.c2 .step-phase, .c2 .result-item .rn { color: #4ade80; }
+.c2 .step-card { border-color: rgba(34,197,94,.2); }
+.c2 .step-card:hover { border-color: rgba(34,197,94,.5); box-shadow: 0 16px 48px rgba(34,197,94,.1); }
+.c2 .open-btn:hover { background: rgba(34,197,94,.12); border-color: rgba(34,197,94,.4); }
+
+.c3 .step-phase, .c3 .result-item .rn { color: #818cf8; }
+.c3 .step-card { border-color: rgba(74,108,247,.2); }
+.c3 .step-card:hover { border-color: rgba(74,108,247,.5); box-shadow: 0 16px 48px rgba(74,108,247,.12); }
+.c3 .open-btn:hover { background: rgba(74,108,247,.12); border-color: rgba(74,108,247,.4); }
+
+.c4 .step-phase, .c4 .result-item .rn { color: #fb923c; }
+.c4 .step-card { border-color: rgba(249,115,22,.2); }
+.c4 .step-card:hover { border-color: rgba(249,115,22,.5); box-shadow: 0 16px 48px rgba(249,115,22,.12); }
+.c4 .open-btn:hover { background: rgba(249,115,22,.12); border-color: rgba(249,115,22,.4); }
+
+.c5 .step-phase, .c5 .result-item .rn { color: #f472b6; }
+.c5 .step-card { border-color: rgba(236,72,153,.2); }
+.c5 .step-card:hover { border-color: rgba(236,72,153,.5); box-shadow: 0 16px 48px rgba(236,72,153,.12); }
+.c5 .open-btn:hover { background: rgba(236,72,153,.12); border-color: rgba(236,72,153,.4); }
+
+/* ── 思路总结 ── */
+.summary {
+  max-width: 860px; margin: 0 auto 60px;
+  padding: 0 24px;
+}
+.summary-card {
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 20px; padding: 32px;
+}
+.summary-card h2 {
+  font-size: 18px; font-weight: 800; margin-bottom: 20px;
+  color: rgba(255,255,255,.9);
+}
+.flow {
+  display: flex; align-items: center; gap: 0;
+  flex-wrap: wrap; gap: 0;
+}
+.flow-item {
+  flex: 1; min-width: 160px;
+  background: rgba(255,255,255,.05); border-radius: 12px;
+  padding: 16px 14px; text-align: center;
+}
+.flow-arrow {
+  font-size: 20px; color: rgba(255,255,255,.2);
+  padding: 0 8px; flex-shrink: 0;
+}
+.flow-item .fi { font-size: 22px; margin-bottom: 6px; }
+.flow-item .ft { font-size: 12px; font-weight: 700; color: rgba(255,255,255,.8); }
+.flow-item .fd { font-size: 11px; color: rgba(255,255,255,.4); margin-top: 3px; line-height: 1.5; }
+@media(max-width:600px){
+  .flow { flex-direction: column; }
+  .flow-arrow { transform: rotate(90deg); }
+}
+
+.insight-list {
+  margin-top: 24px; display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+}
+@media(max-width:600px){ .insight-list { grid-template-columns: 1fr; } }
+.insight-item {
+  background: rgba(255,255,255,.04); border-radius: 10px; padding: 14px 16px;
+  font-size: 13px; color: rgba(255,255,255,.65); line-height: 1.7;
+  border-left: 3px solid rgba(255,255,255,.1);
+}
+.insight-item strong { color: rgba(255,255,255,.9); display: block; margin-bottom: 4px; font-size: 13px; }
+
+footer { text-align: center; padding: 32px; color: rgba(255,255,255,.2); font-size: 12px; }
+</style>
+</head>
+<body>
+
+<!-- Hero -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-tag">PROJECT OVERVIEW</div>
+    <h1>小红书胃肠镜内容项目<br>完整思路回溯</h1>
+    <p>从0条数据开始，经过搜集、分析、选题策划，最终落地成可发布的帖子正文<br>点击任意阶段卡片，直接打开对应文件</p>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="n">568</div><div class="l">采集帖子总量</div></div>
+      <div class="hero-stat"><div class="n">6</div><div class="l">覆盖城市</div></div>
+      <div class="hero-stat"><div class="n">50</div><div class="l">策划选题数</div></div>
+      <div class="hero-stat"><div class="n">24</div><div class="l">已产出正文篇数</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- 时间线 -->
+<div class="timeline">
+
+  <!-- STEP 1 -->
+  <div class="step c1">
+    <div class="step-dot dot-1">1</div>
+    <a class="step-card" href="xhs_analysis_report.html" target="_blank">
+      <div class="step-phase">PHASE 1 · 数据采集 & 分析</div>
+      <div class="step-title">568条帖子数据分析报告</div>
+      <div class="step-file">xhs_analysis_report.html</div>
+      <div class="step-desc">
+        从江阴、宜兴、常州、苏州、无锡出发，后扩展至上海，系统采集小红书胃肠镜相关帖子。对点赞、评论、收藏数据进行多维度统计，找出各城市流量规律和爆款内容特征。
+      </div>
+      <div class="step-tags">
+        <span class="step-tag">数据采集</span>
+        <span class="step-tag">城市对比</span>
+        <span class="step-tag">互动分析</span>
+        <span class="step-tag">爆款特征提炼</span>
+        <span class="step-tag">飞书多维表格</span>
+      </div>
+      <div class="step-results">
+        <div class="result-item"><div class="rn">568</div><div class="rl">有效帖子</div></div>
+        <div class="result-item"><div class="rn">6</div><div class="rl">城市</div></div>
+        <div class="result-item"><div class="rn">41,670</div><div class="rl">最高单篇赞</div></div>
+        <div class="result-item"><div class="rn">3.6×</div><div class="rl">上海 vs 无锡流量倍数</div></div>
+      </div>
+      <br>
+      <span class="open-btn">打开分析报告 →</span>
+    </a>
+    <div style="width:calc(50% - 44px);"></div>
+  </div>
+
+  <!-- STEP 2 -->
+  <div class="step c2">
+    <div class="step-dot dot-2">2</div>
+    <div style="width:calc(50% - 44px);"></div>
+    <a class="step-card" href="xhs_topics_plan.html" target="_blank">
+      <div class="step-phase">PHASE 2 · 选题策划</div>
+      <div class="step-title">50个爆款选题策划</div>
+      <div class="step-file">xhs_topics_plan.html</div>
+      <div class="step-desc">
+        基于数据分析结论，按内容类型拆解为5大策略方向，提炼出50个可直接操作的选题。每个选题附参考数据、爆款逻辑、仿写要点，并给出第一批发布优先级建议。
+      </div>
+      <div class="step-tags">
+        <span class="step-tag">情感共鸣型 ×12</span>
+        <span class="step-tag">攻略工具型 ×15</span>
+        <span class="step-tag">互动触发型 ×10</span>
+        <span class="step-tag">医生IP型 ×8</span>
+        <span class="step-tag">城市本地型 ×5</span>
+      </div>
+      <div class="step-results">
+        <div class="result-item"><div class="rn">50</div><div class="rl">精选选题</div></div>
+        <div class="result-item"><div class="rn">5</div><div class="rl">内容类型</div></div>
+        <div class="result-item"><div class="rn">3</div><div class="rl">优先发布推荐</div></div>
+      </div>
+      <br>
+      <span class="open-btn">打开选题策划 →</span>
+    </a>
+  </div>
+
+  <!-- STEP 3 -->
+  <div class="step c3">
+    <div class="step-dot dot-3">3</div>
+    <a class="step-card" href="xhs_posts_100.html" target="_blank">
+      <div class="step-phase">PHASE 3 · 正文创作（框架版）</div>
+      <div class="step-title">100篇帖子正文框架</div>
+      <div class="step-file">xhs_posts_100.html</div>
+      <div class="step-desc">
+        50个选题每题各2篇，共100篇帖子框架。涵盖完整标题、正文结构、话题标签和写作策略说明。因内容体量较大，本文件包含各类型的结构模板和核心段落，可作为批量生产的蓝本。
+      </div>
+      <div class="step-tags">
+        <span class="step-tag">100篇框架</span>
+        <span class="step-tag">A/B双版本</span>
+        <span class="step-tag">标题+正文+标签</span>
+        <span class="step-tag">写作策略说明</span>
+      </div>
+      <div class="step-results">
+        <div class="result-item"><div class="rn">100</div><div class="rl">篇帖子框架</div></div>
+        <div class="result-item"><div class="rn">50×2</div><div class="rl">选题×版本</div></div>
+      </div>
+      <br>
+      <span class="open-btn">打开100篇框架 →</span>
+    </a>
+    <div style="width:calc(50% - 44px);"></div>
+  </div>
+
+  <!-- STEP 4 -->
+  <div class="step c4">
+    <div class="step-dot dot-4">4</div>
+    <div style="width:calc(50% - 44px);"></div>
+    <a class="step-card" href="xhs_emotion_posts.html" target="_blank">
+      <div class="step-phase">PHASE 4 · 正文创作（精写版·第一批）</div>
+      <div class="step-title">情感共鸣类 · 01–05 · 10篇完整正文</div>
+      <div class="step-file">xhs_emotion_posts.html</div>
+      <div class="step-desc">
+        从50个选题中优先落地情感共鸣类前5题，每题产出A/B两版可直接复制发布的完整正文。包含标题、正文、话题标签，并附写作策略解析。点击正文区域可一键复制。
+      </div>
+      <div class="step-tags">
+        <span class="step-tag">01 一个人做有痛胃镜</span>
+        <span class="step-tag">02 全麻醒来说了什么</span>
+        <span class="step-tag">03 在城市做了个胃镜</span>
+        <span class="step-tag">04 胃镜把我做哭了</span>
+        <span class="step-tag">05 献给和我一样害怕的你</span>
+      </div>
+      <div class="step-results">
+        <div class="result-item"><div class="rn">10</div><div class="rl">完整正文</div></div>
+        <div class="result-item"><div class="rn">5×2</div><div class="rl">选题×A/B版</div></div>
+        <div class="result-item"><div class="rn">一键</div><div class="rl">复制发布</div></div>
+      </div>
+      <br>
+      <span class="open-btn">打开第一批正文 →</span>
+    </a>
+  </div>
+
+  <!-- STEP 5 -->
+  <div class="step c5">
+    <div class="step-dot dot-5">5</div>
+    <a class="step-card" href="xhs_emotion_posts2.html" target="_blank">
+      <div class="step-phase">PHASE 5 · 正文创作（精写版·第二批）</div>
+      <div class="step-title">情感共鸣类 · 06–12 · 14篇完整正文</div>
+      <div class="step-file">xhs_emotion_posts2.html</div>
+      <div class="step-desc">
+        情感共鸣类剩余7题全部落地，每题A/B双版完整正文。覆盖30岁健康焦虑、肠道准备全纪实、陪父母检查、息肉庆幸反转、7年检查老手经验、麻醉风险科普、胶囊胃镜对比等多角度切入。点击正文一键复制。
+      </div>
+      <div class="step-tags">
+        <span class="step-tag">06 30岁第一次沉默了</span>
+        <span class="step-tag">07 4升泻药安全下车</span>
+        <span class="step-tag">08 妈妈让我陪她哭了</span>
+        <span class="step-tag">09 万幸查出来了</span>
+        <span class="step-tag">10 连续7年经历</span>
+        <span class="step-tag">11 差点进ICU</span>
+        <span class="step-tag">12 不用做胃镜了</span>
+      </div>
+      <div class="step-results">
+        <div class="result-item"><div class="rn">14</div><div class="rl">完整正文</div></div>
+        <div class="result-item"><div class="rn">7×2</div><div class="rl">选题×A/B版</div></div>
+        <div class="result-item"><div class="rn">一键</div><div class="rl">复制发布</div></div>
+      </div>
+      <br>
+      <span class="open-btn">打开第二批正文 →</span>
+    </a>
+    <div style="width:calc(50% - 44px);"></div>
+  </div>
+
+</div>
+
+<!-- 思路总结 -->
+<div class="summary">
+  <div class="summary-card">
+    <h2>🗺️ 整体思路脉络</h2>
+
+    <div class="flow">
+      <div class="flow-item">
+        <div class="fi">📡</div>
+        <div class="ft">数据采集</div>
+        <div class="fd">568条真实帖子<br>6城市覆盖</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-item">
+        <div class="fi">🔬</div>
+        <div class="ft">规律分析</div>
+        <div class="fd">城市流量差异<br>爆款内容特征</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-item">
+        <div class="fi">💡</div>
+        <div class="ft">选题策划</div>
+        <div class="fd">5类型×50选题<br>含优先级排序</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-item">
+        <div class="fi">✍️</div>
+        <div class="ft">正文落地</div>
+        <div class="fd">A/B双版本<br>可直接发布</div>
+      </div>
+    </div>
+
+    <div class="insight-list">
+      <div class="insight-item">
+        <strong>🏙️ 城市策略</strong>
+        上海流量是无锡的3.6倍，优先布局上海内容；常州/宜兴/江阴竞争几乎为零，是内容蓝海。
+      </div>
+      <div class="insight-item">
+        <strong>❤️ 情感型优先冷启动</strong>
+        情感共鸣类帖子均赞最高（最高41,670），适合账号冷启动，先用赞量建立初始权重。
+      </div>
+      <div class="insight-item">
+        <strong>🔖 攻略型保证长尾流量</strong>
+        收藏型内容（城市医院攻略藏5,228）在搜索中持续曝光，是稳定获客的压舱石。
+      </div>
+      <div class="insight-item">
+        <strong>✍️ A/B测试迭代</strong>
+        每个选题出A/B两版，分批发布后对比数据，用真实结果指导下一批内容方向。
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>小红书胃肠镜内容项目 · 基于568条真实帖子数据构建 · 持续迭代中</footer>
+
+</body>
+</html>

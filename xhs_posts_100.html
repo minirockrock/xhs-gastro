@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>小红书胃肠镜 · 100篇帖子正文库</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif; background: #f5f6fa; color: #1a1a2e; }
+
+.header {
+  background: linear-gradient(135deg, #ff2442 0%, #ff6b6b 60%, #ffa07a 100%);
+  color: white; padding: 44px 24px 60px; text-align: center; position: relative; overflow: hidden;
+}
+.header::after {
+  content: ''; position: absolute; bottom: -1px; left: 0; right: 0; height: 44px;
+  background: #f5f6fa; border-radius: 44px 44px 0 0;
+}
+.header h1 { font-size: 26px; font-weight: 900; margin-bottom: 8px; }
+.header p  { font-size: 14px; opacity: .88; }
+.badge { display: inline-block; background: rgba(255,255,255,.22); border: 1px solid rgba(255,255,255,.4); padding: 3px 12px; border-radius: 20px; font-size: 12px; margin: 8px 4px 0; }
+
+.container { max-width: 1100px; margin: 0 auto; padding: 0 16px 80px; }
+
+/* 筛选 */
+.filter-bar {
+  display: flex; gap: 8px; flex-wrap: wrap; padding: 24px 0 16px;
+  position: sticky; top: 0; background: #f5f6fa; z-index: 100;
+  border-bottom: 1px solid #eee;
+}
+.filter-btn {
+  padding: 6px 16px; border-radius: 20px; border: 1.5px solid #ddd;
+  font-size: 13px; cursor: pointer; background: white; color: #555;
+  transition: all .2s; font-weight: 500;
+}
+.filter-btn.active, .filter-btn:hover { background: #ff2442; color: white; border-color: #ff2442; }
+
+/* 选题分组 */
+.topic-block { margin: 28px 0 0; }
+.topic-header {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 16px; background: white; border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,.05);
+  margin-bottom: 14px;
+}
+.topic-header .num { font-size: 24px; font-weight: 900; color: #eee; }
+.topic-header .title { font-size: 16px; font-weight: 800; flex: 1; }
+.topic-header .type-tag {
+  font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 10px;
+}
+.tag-emotion  { background: #fff0f3; color: #ff2442; }
+.tag-guide    { background: #f0fff4; color: #22c55e; }
+.tag-interact { background: #eef2ff; color: #4a6cf7; }
+.tag-doctor   { background: #fff7ed; color: #f97316; }
+.tag-city     { background: #faf5ff; color: #a855f7; }
+
+/* 帖子卡片 */
+.posts-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+@media(max-width:700px){ .posts-row { grid-template-columns: 1fr; } }
+
+.post-card {
+  background: white; border-radius: 14px; padding: 20px;
+  box-shadow: 0 2px 12px rgba(0,0,0,.05);
+  border-left: 4px solid #eee;
+}
+.post-card.emotion  { border-left-color: #ff2442; }
+.post-card.guide    { border-left-color: #22c55e; }
+.post-card.interact { border-left-color: #4a6cf7; }
+.post-card.doctor   { border-left-color: #f97316; }
+.post-card.city     { border-left-color: #a855f7; }
+
+.post-label {
+  font-size: 11px; font-weight: 700; color: #999; margin-bottom: 8px;
+  letter-spacing: .5px; text-transform: uppercase;
+}
+.post-title {
+  font-size: 15px; font-weight: 800; color: #1a1a2e;
+  margin-bottom: 12px; line-height: 1.5;
+  padding-bottom: 10px; border-bottom: 1px dashed #eee;
+}
+.post-body {
+  font-size: 13.5px; line-height: 1.85; color: #333;
+  white-space: pre-wrap; word-break: break-all;
+}
+.post-tags {
+  margin-top: 12px; padding-top: 10px; border-top: 1px dashed #eee;
+  font-size: 12px; color: #ff2442; line-height: 1.8;
+}
+
+/* 隐藏 */
+.topic-block.hidden { display: none; }
+
+footer { text-align: center; padding: 32px; color: #bbb; font-size: 12px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>✍️ 小红书胃肠镜 · 100篇帖子正文库</h1>
+  <p>基于568条真实数据 · 50个选题 · 每题2篇可直接发布的帖子</p>
+  <div>
+    <span class="badge">❤️ 情感共鸣 ×24篇</span>
+    <span class="badge">🔖 攻略工具 ×30篇</span>
+    <span class="badge">💬 互动触发 ×20篇</span>
+    <span class="badge">👨‍⚕️ 医生IP ×16篇</span>
+    <span class="badge">🏙️ 城市本地 ×10篇</span>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="filter-bar">
+    <button class="filter-btn active" onclick="filterPosts('all',this)">全部（50题×2）</button>
+    <button class="filter-btn" onclick="filterPosts('emotion',this)">❤️ 情感共鸣</button>
+    <button class="filter-btn" onclick="filterPosts('guide',this)">🔖 攻略工具</button>
+    <button class="filter-btn" onclick="filterPosts('interact',this)">💬 互动触发</button>
+    <button class="filter-btn" onclick="filterPosts('doctor',this)">👨‍⚕️ 医生IP</button>
+    <button class="filter-btn" onclick="filterPosts('city',this)">🏙️ 城市本地</button>
+  </div>
+
+<!-- ===========================
+     情感共鸣型 01-12
+=========================== -->
+
+<!-- 01 -->
+<div class="topic-block" data-type="emotion">
+  <div class="topic-header">
+    <span class="num">01</span>
+    <span class="title">关于我一个人去做了有痛胃镜，比想象中……</span>
+    <span class="type-tag tag-emotion">情感共鸣</span>
+    <span style="font-size:12px;color:#aaa;">参考原帖赞41,670</span>
+  </div>
+  <div class="posts-row">
+
+    <div class="post-card emotion">
+      <div class="post-label">📝 版本 A · 悬念揭秘型</div>
+      <div class="post-title">关于我一个人去做了有痛胃镜，比想象中……</div>
+      <div class="post-body">关于我一个人去做了有痛胃镜，比想象中……
+
+好太多了。
+
+说出来你可能不信，我在候诊室等待的那30分钟，把所有能想到的最坏画面在脑子里过了至少三遍。
+
+胃管插进喉咙、剧烈的恶心反射、挣扎着想撤退却被医生按住——
+
+结果呢？
+
+真实过程是这样的：
+
+🟡 进诊室前，护士让我放松肩膀，深呼吸三次
+🟡 医生插镜前会喷局麻药，喉咙麻麻的感觉先到
+🟡 真正最不舒服的阶段：大概10秒，就过去了
+🟡 全程大约8分钟，我一直盯着旁边的监视器看自己的胃
+🟡 出来的时候，我问护士：就这样？
+
+她笑了笑说："大家都说比想象中好。"
+
+我一个人去的。没有人陪。
+挂号、等待、做完、拿报告、一个人坐地铁回家。
+
+结果发现：慢性浅表性胃炎，小问题，定期复查就好。
+
+但我很庆幸我去做了。
+
+如果你也在犹豫，我想说——
+最难的不是检查本身，是走进医院挂号的那一步。
+
+迈出去，就没那么可怕了。
+
+今天我帮你迈出去了吗？🥹</div>
+      <div class="post-tags">#胃镜 #无痛胃镜 #有痛胃镜 #胃肠镜检查 #胃镜经历 #一个人 #健康打卡</div>
+    </div>
+
+    <div class="post-card emotion">
+      <div class="post-label">📝 版本 B · 时间线流水账型</div>
+      <div class="post-title">一个人去做有痛胃镜全程记录 · 完结篇</div>
+      <div class="post-body">一个人去做有痛胃镜全程记录 · 完结篇✅
+
+昨天终于去做了，一个人。提前3天睡不好，今天来给你们报个平安。
+
+⏰ 08:20 到院
+刚进消化内镜中心，候诊区已经坐了七八个人。签知情同意书，护士问了过敏史和基础病。
+
+⏰ 09:05 叫号进诊室
+进去之前换了鞋套，躺上检查床，左侧卧，腿微微弯曲。
+
+⏰ 09:07 开始喷麻醉药
+喉咙里先喷了一种甜甜的局麻药，要含住1分钟，麻了之后才开始插镜。
+
+⏰ 09:09 插镜
+这一步其实最短。会有恶心感，但镜子过了喉咙弯道就好多了。
+我全程就干呕了2次，医生一直在说"吞口水"、"放松"。
+
+⏰ 09:17 结束
+前后不到8分钟。护士给我倒了杯温水，让我坐着休息15分钟。
+
+⏰ 09:35 取报告
+慢性浅表性胃炎，建议3个月后复查，没有大问题。
+
+✅ 总结：
+怕痛的我给有痛胃镜的痛苦程度打5/10分。
+最难受的是喉咙进镜那一下，大概10秒，可以接受。
+比我大学做牙齿矫正还轻松一点😅
+
+一个人也可以，不需要有人陪。
+做完自己能走路，能打车，能吃饭。
+
+准备做的宝宝，不用怕！</div>
+      <div class="post-tags">#胃镜经历 #有痛胃镜 #胃镜全程记录 #第一次做胃镜 #消化内镜 #健康生活</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- 02 -->
+<div class="topic-block" data-type="emotion">
+  <div class="topic-header">
+    <span class="num">02</span>
+    <span class="title">第一次做胃肠镜，全麻醒来我说了什么……</span>
+    <span class="type-tag tag-emotion">情感共鸣</span>
+    <span style="font-size:12px;color:#aaa;">参考原帖赞22,723</span>
+  </div>
+  <div class="posts-row">
+
+    <div class="post-card emotion">
+      <div class="post-label">📝 版本 A · 幽默自嘲型</div>
+      <div class="post-title">第一次全麻做胃肠镜，醒来说了什么……我想消失</div>
+      <div class="post-body">第一次全麻做胃肠镜，醒来说了什么……我想消失🫠
+
+做之前最担心的就一件事：
+"全麻之后会不会说胡话？"
+
+护士说：一般不会乱说，就是可能有点迷糊。
+
+结果我做完醒来，在复苏室还没完全清醒，就开始了——
+
+我问旁边护士："做完了吗？我还要继续吗？"
+护士说："做完了，好好躺着。"
+我说："哦。那我今天表现好不好？"
+（护士忍住笑）
+
+然后沉默了两秒，我又补了一句：
+"我饿了，能吃麦当劳吗？"
+
+……
+
+我妈事后跟我说，她在外面等，护士出来通知她"你女儿情况很好，不过一直在说饿"。
+
+好家伙，没说什么秘密，就是食欲旺盛。
+
+📌 认真说几句：
+全麻无痛胃肠镜术后确实会有段时间意识模糊，大概15-30分钟。
+期间可能说一些不太连贯的话，但不会"说出心里话"那种程度——
+放心，你的秘密还在。
+
+需要有人陪同离院，不能自己开车！
+做完2小时内不建议吃东西，从流食开始。
+
+大家全麻醒来说过什么奇怪的话吗？😂 评论区来报告！</div>
+      <div class="post-tags">#无痛胃肠镜 #全麻 #胃肠镜经历 #搞笑真实 #第一次做胃镜 #健康打卡</div>
+    </div>
+
+    <div class="post-card emotion">
+      <div class="post-label">📝 版本 B · 好奇解答型</div>
+      <div class="post-title">全麻做胃肠镜真的会乱说话吗？做完我来汇报</div>
+      <div class="post-body">全麻做胃肠镜真的会乱说话吗？做完我来汇报📋
+
+这个问题在小红书上有几千条讨论，每次我搜都越看越害怕——什么"说出了所有秘密"、"当众嚎啕大哭"……
+
+我上周刚做完，来给大家一个真实答案。
+
+🔬 先说结论：
+不会乱说话，但会有"意识模糊期"。
+
+用的是丙泊酚+芬太尼的组合麻醉。
+
+打进去大概10秒，我就睡着了——不是慢慢睡，是突然消失的那种。
+
+醒来的时候在复苏区，护士在旁边记录，我第一反应是：
+
+"做完了吗？"
+"我能喝水吗？"
+"我要去厕所。"
+
+——就这三句话，反复说了好几遍。
+
+我全程没有说任何奇奇怪怪的话，也没有哭，就是有点傻乎乎的、睡眼惺忪的状态。
+
+大概20分钟后完全清醒，回忆不起来检查过程（这是正常的）。
+
+📌 注意事项：
+• 检查当天需要家人/朋友陪同
+• 24小时内不能驾车、不能饮酒
+• 复苏期间有护士全程陪护，不用担心
+• 如果你有顾虑，可以提前告诉医生
+
+总结：没那么可怕，放轻松就好。
+当年那些"全麻说了什么"的帖子纯纯吓人😂</div>
+      <div class="post-tags">#无痛胃肠镜 #全麻 #丙泊酚 #胃肠镜经历 #检查攻略 #消除恐惧</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- 03 -->
+<div class="topic-block" data-type="emotion">
+  <div class="topic-header">
+    <span class="num">03</span>
+    <span class="title">在【城市】做了个胃镜，有些话想告诉你</span>
+    <span class="type-tag tag-emotion">情感共鸣</span>
+    <span style="font-size:12px;color:#aaa;">参考原帖赞2,761</span>
+  </div>
+  <div class="posts-row">
+
+    <div class="post-card emotion">
+      <div class="post-label">📝 版本 A · 上海版 · 温情倾诉型</div>
+      <div class="post-title">在上海做了个胃镜，有些话想告诉你</div>
+      <div class="post-body">在上海做了个胃镜，有些话想告诉你。
+
+上周五，仁济医院东院，消化内镜中心，9号诊室。
+
+候诊区里一共12个人。有白发老人，有穿着工装的年轻人，有一个看起来不超过25岁的女生，一个人，盯着手机，腿在轻轻抖。
+
+我看着她，想到了3个月前的自己。
+
+那时候胃一直不舒服，网上一搜全是"可能是胃癌早期"。
+又拖了两个月，最后是朋友把我拖进了医院。
+
+做完之后报告说：轻度慢性胃炎。
+
+就这样。
+
+那两个月的担惊受怕、那个深夜反复查资料的我，被"轻度慢性胃炎"这六个字轻轻化解了。
+
+我想告诉那个在候诊区抖腿的女生，
+也想告诉还在犹豫的你——
+
+做之前的恐惧，往往比做这件事本身大得多。
+
+迈进去。
+
+不管结果怎样，总比不知道要强。
+
+上海的朋友有问题可以在评论区问我，我来解答🫶</div>
+      <div class="post-tags">#上海胃镜 #仁济医院 #胃镜经历 #真实分享 #健康提醒 #做胃镜</div>
+    </div>
+
+    <div class="post-card emotion">
+      <div class="post-label">📝 版本 B · 无锡/苏州版 · 叙事记录型</div>
+      <div class="post-title">在无锡做了个胃镜，有些话想告诉你</div>
+      <div class="post-body">在无锡做了个胃镜，有些话想告诉你。
+
+地点：无锡市人民医院，消化科内镜中心。
+时间：周二早上8点半。
+
+到的时候诊室门口已经有人在等了。旁边坐着一个中年男人，手机屏幕上是他儿子发来的消息："爸，做完给我打电话。"
+
+他笑了一下，锁屏，闭眼等待。
+
+我想，每一个坐在这里的人，背后都有属于自己的故事。
+
+有人是体检查出问题被转介过来，
+有人是胃痛好多年终于下定决心，
+有人是陪父母来，顺便把自己的也做了。
+
+我属于最后一种。
+
+爸爸做完，等我的时候，他在外面给我买了一杯豆浆——"做完了能吃东西的，"他说，"我问过护士了。"
+
+检查结果：我有个2mm的小息肉，切掉了，医生说完全不用担心。
+
+爸爸看了报告，半天没说话，然后说：
+"幸好你也做了。"
+
+是啊，幸好做了。
+
+无锡的朋友如果有关于市人医内镜中心的问题，欢迎评论区来聊💬</div>
+      <div class="post-tags">#无锡胃镜 #市人民医院 #胃镜经历 #家人陪同 #肠息肉 #健康检查</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- 04 -->
+<div class="topic-block" data-type="emotion">
+  <div class="topic-header">
+    <span class="num">04</span>
+    <span class="title">胃镜把我做哭了，但我不后悔去做</span>
+    <span class="type-tag tag-emotion">情感共鸣</span>
+    <span style="font-size:12px;color:#aaa;">情绪反转型，均赞>3000</span>
+  </div>
+  <div class="posts-row">
+
+    <div class="post-card emotion">
+      <div class="post-label">📝 版本 A · 情绪反转+健康警示型</div>
+      <div class="post-title">胃镜把我做哭了，但我不后悔去做</div>
+      <div class="post-body">胃镜把我做哭了，但我不后悔去做。
+
+不是因为很痛。
+
+是因为报告出来的瞬间，我坐在诊室外的椅子上，突然不知道该打电话给谁说这件事。
+
+报告写着：萎缩性胃炎（轻度），伴肠化生。
+
+我不太懂这几个字是什么意思，但医生说——"早期发现是好事，你现在知道了，就可以管理它了。"
+
+然后我就哭了。
+
+不是绝望，是释放。
+
+拖了快两年，那种说不清楚的胃不舒服，那种查了又放下、怀疑又否认的循环，终于有了一个答案。
+
+哭完，医生给我开了调理方案，讲了饮食注意事项，告诉我6个月后复查。
+
+走出医院，天还是蓝的。
+
+我在医院门口站了一会儿，给妈妈发了条消息：
+"做完了，没大问题，别担心。"
+
+然后买了杯奶茶，坐上地铁回家。
+
+不是因为很痛，所以哭了。
+是因为，终于面对了。
+
+如果你也一直在拖——今天就去挂个号吧。</div>
+      <div class="post-tags">#胃镜 #萎缩性胃炎 #肠化生 #胃镜经历 #健康打卡 #早发现早治疗</div>
+    </div>
+
+    <div class="post-card emotion">
+      <div class="post-label">📝 版本 B · 有痛过程+正向收尾型</div>
+      <div class="post-title">做胃镜真的会哭，但做完那一刻值了</div>
+      <div class="post-body">做胃镜真的会哭，但做完那一刻值了。
+
+说实话，是有痛胃镜，我确实哭了一点。
+
+不是嚎啕大哭，就是眼角有点湿——是那种难受到眼泪自动出来、完全不受控制的反应。
+
+整个过程大概7分钟。最难熬的是进镜穿过喉咙弯道的那一下，有明显的恶心感和压迫感，我干呕了三次。
+
+医生全程在说："放松，吞一下，好，保持……"
+
+有个细节让我很触动：
+医生在检查的间隙，侧头跟我说了句：
+"你很配合，快好了。"
+
+就这一句话，我突然就没那么难受了。
+
+结果出来：胃黏膜正常，没有问题！
+
+从诊室出来，护士递给我纸巾，说："哭的都是好同学。"
+
+我又笑了。
+
+后来我觉得，那个哭，是2年来所有「担心生病却不敢去查」的压力，集中在那7分钟里，找到了出口。
+
+做完了，反而特别轻松。
+
+你也拖着不敢做的吗？说说你的顾虑，我来回答🌸</div>
+      <div class="post-tags">#有痛胃镜 #胃镜 #第一次做胃镜 #克服恐惧 #胃镜经历 #内镜检查</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- 05 -->
+<div class="topic-block" data-type="emotion">
+  <div class="topic-header">
+    <span class="num">05</span>
+    <span class="title">一人肠胃镜全程记录，献给和我一样害怕的你</span>
+    <span class="type-tag tag-emotion">情感共鸣</span>
+    <span style="font-size:12px;color:#aaa;">参考原帖赞2,855</span>
+  </div>
+  <div class="posts-row">
+
+    <div class="post-card emotion">
+      <div class="post-label">📝 版本 A · 图文日记型</div>
+      <div class="post-title">一人肠胃镜全程记录，献给和我一样害怕的你🫶</div>
+      <div class="post-body">一人肠胃镜全程记录，献给和我一样害怕的你🫶
+
+报名：怕做胃镜的社恐，30岁，无人陪同，第一次做。
+
+以下是我全程的真实记录：
+
+📍 检查前一天
+- 只吃流食（白粥、米汤），下午4点后禁食
+- 失眠，把能搜到的攻略看了一遍又一遍
+
+📍 检查当天 06:00
+- 开始喝复方聚乙二醇（肠道清洁剂），1.5小时喝完2升
+- 跑了7次厕所，排出来变清水色后算合格
+
+📍 07:30 到院
+- 护士核实信息，抽血化验，排队等候
+- 我坐在候诊区，脑子空白，就盯着地板看
+
+📍 09:20 叫号
+- 进换衣间穿了检查专用裤（开裆裤，是的）
+- 挂上输液瓶，平躺上检查床，左侧卧
+- 护士打了麻醉，就这样慢慢睡着了…
+
+📍 不知道过了多久
+- 在复苏室醒来，旁边有护士，说"做完了，很顺利"
+- 我问几点，她说10:05
+- 我脑子里一片空白，但很平静
+
+📍 10:40 取报告
+- 肠镜：正常，未见息肉
+- 胃镜：慢性非萎缩性胃炎（非常常见的结论）
+
+一个人做，一个人等，一个人回家。
+全程花了大约4小时。
+
+但真的——没那么难。
+
+你们有什么问题，评论区见💬</div>
+      <div class="post-tags">#胃肠镜 #无痛胃肠镜 #肠镜 #胃镜 #一个人 #全程记录 #第一次</div>
+    </div>
+
+    <div class="post-card emotion">
+      <div class="post-label">📝 版本 B · 心理建设型</div>
+      <div class="post-title">写给和我一样，害怕做肠胃镜、一直在拖的你</div>
+      <div class="post-body">写给和我一样，害怕做肠胃镜、一直在拖的你。
+
+我拖了整整11个月。
+
+从第一次搜"胃肠镜要注意什么"到真正走进医院，11个月。
+
+中间无数次打开医院App想预约，打开了，又关掉。
+说服自己"胃不舒服只是最近太累了"。
+在小红书刷了几百篇"做完没事"的帖子，还是迈不出那一步。
+
+直到去年底，一个朋友查出了早期胃癌。
+
+我第二天就挂号了。
+
+做完以后，我反复想——
+如果我早11个月去，是不是也早11个月安了心？
+
+我的结果是：慢性浅表性胃炎。没有大问题。
+
+那11个月的拖延，唯一的代价是：白白担心了11个月。
+
+现在我想把这个"安心"告诉你。
+
+不一定做完没事，但做了，你就有了答案。
+有了答案，才能往前走。
+
+准备做的朋友，来评论区打个卡吧🙋
+做完了的也来报个平安💬</div>
+      <div class="post-tags">#胃肠镜 #拖延 #健康焦虑 #克服恐惧 #做胃镜 #健康检查 #早发现</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- 06 -->
+<div class="topic-block" data-type="emotion">
+  <div class="topic-header">
+    <span class="num">06</span>
+    <span class="title">30岁第一次做胃肠镜，结果让我沉默了</span>
+    <span class="type-tag tag-emotion">情感共鸣</span>
+    <span style="font-size:12px;color:#aaa;">年龄焦虑触发</span>
+  </div>
+  <div class="posts-row">
+
+    <div class="post-card emotion">
+      <div class="post-label">📝 版本 A · 发现问题+庆幸型</div>
+      <div class="post-title">30岁第一次做胃肠镜，结果让我沉默了</div>
+      <div class="post-body">30岁第一次做胃肠镜，结果让我沉默了。
+
+我以为我很健康的。
+
+不抽烟、很少喝酒、偶尔跑步，30岁，公司里最年轻的那批人。
+
+胃只是偶尔隐隐作痛，我以为是工作压力大。
+
+上个月体检，医生建议做个胃肠镜。
+
+"我才30岁，有必要吗？"
+"有，建议做。"
+
+报告出来，我沉默了：
+
+胃镜：慢性非萎缩性胃炎 + 幽门螺旋杆菌阳性(+++)
+肠镜：发现一枚3mm小腺瘤性息肉，已切除
+
+幽门螺旋杆菌是要根除的，三联疗法，两周。
+小息肉切掉了，良性，但说明肠道环境需要改善。
+
+30岁。发现这些。
+
+我沉默，是因为——庆幸。
+
+庆幸不是40岁才知道，不是等到症状严重了才查。
+
+庆幸现在还是处理得了的阶段。
+
+还记得之前说「30岁没必要做」的自己：
+你错了，30岁，正是时候。
+
+如果你也是30岁左右，胃偶尔不舒服——
+去做一次吧，别再"等等看"了。</div>
+      <div class="post-tags">#胃肠镜 #30岁 #幽门螺旋杆菌 #肠息肉 #早发现早治疗 #健康提醒</div>
+    </div>
+
+    <div class="post-card emotion">
+      <div class="post-label">📝 版本 B · 触发代入型</div>
+      <div class="post-title">30多岁做第一次胃镜，医生说了一句让我愣住了</div>
+      <div class="post-body">30多岁做第一次胃镜，医生说了一句让我愣住了。
+
+做完从诊室出来，医生追了我一句：
+"你这个年纪第一次做，来得还不算晚。"
+
+我当时没太懂这句话，后来越想越觉得沉。
+
+因为他接着说：
+"我们这里见过28岁的早期胃癌，很多人都是觉得'还年轻，没必要'。"
+
+我才31岁，以前真的觉得胃镜是中老年人的事。
+
+结果我这次查出来：
+- 幽门螺旋杆菌强阳性（+++）
+- 胃窦部轻度慢性炎症
+
+都还在早期，可以处理。
+
+但我心里多少还是有一点后怕——
+如果我再拖两年，会变成什么？
+
+现在根除幽门螺旋杆菌中，两周的药，希望下次复查结果好看。
+
+想问一下：
+你们是什么年龄做了第一次胃肠镜？
+做了之后有什么发现吗？评论区来聊🙋</div>
+      <div class="post-tags">#胃镜 #年龄 #幽门螺旋杆菌 #胃炎 #健康焦虑 #第一次做胃镜</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- 07 -->
+<div class="topic-block" data-type="emotion">
+  <div class="topic-header">
+    <span class="num">07</span>
+    <span class="title">喝了4升泻药拉了12次，我终于「安全下车」了</span>
+    <span class="type-tag tag-emotion">情感共鸣</span>
+    <span style="font-size:12px;color:#aaa;">参考原帖赞868</span>
+  </div>
+  <div class="posts-row">
+
+    <div class="post-card emotion">
+      <div class="post-label">📝 版本 A · 幽默自嘲型</div>
+      <div class="post-title">喝了4升泻药拉了12次，我安全下车了😭</div>
+      <div class="post-body">喝了4升泻药拉了12次，我安全下车了😭
+
+做肠胃镜最痛苦的阶段，大家都知道——肠道准备。
+
+护士给我开了复方聚乙二醇（PEG）4升。
+
+"4升"这个数字当时看了一眼，然后礼貌地问：
+"……4升是多少？"
+"就是4瓶矿泉水。"
+"…………"
+
+以下是昨天晚上我的肠道清洁实况直播：
+
+🚽 19:00 开始喝第一瓶
+口味：淡淡咸，还好，可以接受
+🚽 19:15 第一次厕所
+感觉普通，没什么不同
+🚽 19:45 第三次厕所
+开始不普通了
+🚽 20:30 第七次厕所
+"我不做了行不行"（不行）
+🚽 21:15 第十二次厕所
+颜色已经变成清水色 ✅ 合格！
+
+护士第二天说：排出来是清水色或者淡黄色，就说明准备合格了。
+
+✅ 小技巧分享：
+→ 喝的时候可以加柠檬汁，口感好一点
+→ 每250ml喝完后走动一下，帮助排出
+→ 提前备好温热的纸巾（拉多了会脱皮🥲）
+→ 厕所附近不要离太远……
+
+最后检查结果：没有息肉，胃也没大问题！
+
+为了安全下车，值了！
+
+来，评论区说说你们喝了几次厕所🚽🚽🚽</div>
+      <div class="post-tags">#肠镜 #肠道准备 #泻药 #无痛肠胃镜 #安全下车 #胃肠镜攻略

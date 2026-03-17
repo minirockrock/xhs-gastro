@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>小红书胃肠镜内容选题策划 · 50个爆款选题</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif; background: #f5f6fa; color: #1a1a2e; }
+
+.header {
+  background: linear-gradient(135deg, #ff2442 0%, #ff6b6b 60%, #ffa07a 100%);
+  color: white; padding: 44px 24px 56px; text-align: center; position: relative; overflow: hidden;
+}
+.header::after {
+  content: ''; position: absolute; bottom: -1px; left: 0; right: 0; height: 40px;
+  background: #f5f6fa; border-radius: 40px 40px 0 0;
+}
+.header h1 { font-size: 26px; font-weight: 900; margin-bottom: 8px; }
+.header p  { font-size: 14px; opacity: .88; }
+.badge { display: inline-block; background: rgba(255,255,255,.22); border: 1px solid rgba(255,255,255,.4); padding: 3px 12px; border-radius: 20px; font-size: 12px; margin: 8px 4px 0; }
+
+.container { max-width: 960px; margin: 0 auto; padding: 0 16px 60px; }
+
+/* 筛选导航 */
+.filter-bar {
+  display: flex; gap: 8px; flex-wrap: wrap; padding: 20px 0 16px;
+  position: sticky; top: 0; background: #f5f6fa; z-index: 100;
+}
+.filter-btn {
+  padding: 6px 16px; border-radius: 20px; border: 1.5px solid #ddd;
+  font-size: 13px; cursor: pointer; background: white; color: #555;
+  transition: all .2s; font-weight: 500;
+}
+.filter-btn.active, .filter-btn:hover { background: #ff2442; color: white; border-color: #ff2442; }
+
+/* 选题卡片 */
+.topic-section { margin-bottom: 32px; }
+.section-header {
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px 0 14px; border-bottom: 2px solid #eee; margin-bottom: 16px;
+}
+.section-icon { font-size: 22px; }
+.section-title { font-size: 18px; font-weight: 800; }
+.section-desc { font-size: 13px; color: #888; margin-left: auto; }
+
+.topic-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+@media(max-width:640px){ .topic-grid { grid-template-columns: 1fr; } }
+
+.topic-card {
+  background: white; border-radius: 14px; padding: 18px;
+  box-shadow: 0 2px 12px rgba(0,0,0,.05);
+  border-top: 4px solid #eee; transition: transform .2s, box-shadow .2s;
+  position: relative;
+}
+.topic-card:hover { transform: translateY(-3px); box-shadow: 0 6px 24px rgba(0,0,0,.1); }
+
+/* 颜色主题 */
+.type-emotion  { border-top-color: #ff2442; }
+.type-guide    { border-top-color: #22c55e; }
+.type-interact { border-top-color: #4a6cf7; }
+.type-doctor   { border-top-color: #f97316; }
+.type-city     { border-top-color: #a855f7; }
+
+.topic-num {
+  position: absolute; top: 14px; right: 16px;
+  font-size: 26px; font-weight: 900; color: #f0f0f0; line-height: 1;
+}
+.topic-type-tag {
+  font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 10px;
+  display: inline-block; margin-bottom: 10px;
+}
+.tag-emotion  { background: #fff0f3; color: #ff2442; }
+.tag-guide    { background: #f0fff4; color: #22c55e; }
+.tag-interact { background: #eef2ff; color: #4a6cf7; }
+.tag-doctor   { background: #fff7ed; color: #f97316; }
+.tag-city     { background: #faf5ff; color: #a855f7; }
+
+.topic-title {
+  font-size: 15px; font-weight: 700; color: #1a1a2e; margin-bottom: 10px;
+  line-height: 1.5;
+}
+.topic-title .city-mark { color: #888; font-weight: 400; font-size: 13px; }
+
+.topic-meta { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+.meta-item {
+  font-size: 11px; padding: 2px 8px; border-radius: 8px; background: #f5f6fa; color: #555;
+}
+.meta-item.hot { background: #fff0f3; color: #ff2442; }
+
+.topic-why {
+  font-size: 12px; color: #555; line-height: 1.7;
+  background: #f8f9fc; border-radius: 8px; padding: 8px 10px;
+}
+.topic-why strong { color: #1a1a2e; }
+
+.topic-ref {
+  margin-top: 8px; font-size: 11px; color: #aaa;
+  border-top: 1px dashed #eee; padding-top: 8px;
+}
+.topic-ref span { color: #ff2442; }
+
+/* 概览卡片 */
+.summary-grid { display: grid; grid-template-columns: repeat(5,1fr); gap: 12px; margin-bottom: 28px; }
+.summary-item { background: white; border-radius: 12px; padding: 16px 12px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,.05); }
+.summary-item .num { font-size: 28px; font-weight: 900; }
+.summary-item .lbl { font-size: 11px; color: #888; margin-top: 4px; }
+.emotion-num { color: #ff2442; }
+.guide-num   { color: #22c55e; }
+.interact-num{ color: #4a6cf7; }
+.doctor-num  { color: #f97316; }
+.city-num    { color: #a855f7; }
+
+.tips-box {
+  background: linear-gradient(135deg, #fff5f7, #fff0f3);
+  border: 1px solid #ffd5dc; border-radius: 14px; padding: 20px;
+  margin-bottom: 28px;
+}
+.tips-box h3 { font-size: 15px; font-weight: 700; margin-bottom: 12px; color: #ff2442; }
+.tips-list { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.tips-list li {
+  font-size: 13px; color: #444; padding-left: 18px; position: relative;
+  line-height: 1.6; list-style: none;
+}
+.tips-list li::before { content: '→'; position: absolute; left: 0; color: #ff2442; font-weight: 700; }
+
+footer { text-align: center; padding: 24px; color: #bbb; font-size: 12px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>📋 小红书胃肠镜内容选题策划</h1>
+  <p>基于568条真实帖子数据提炼 · 50个可直接使用的爆款选题</p>
+  <div>
+    <span class="badge">❤️ 情感共鸣型 ×12</span>
+    <span class="badge">🔖 攻略工具型 ×15</span>
+    <span class="badge">💬 互动触发型 ×10</span>
+    <span class="badge">👨‍⚕️ 医生IP型 ×8</span>
+    <span class="badge">🏙️ 城市本地型 ×5</span>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- 概览 -->
+  <div class="summary-grid" style="margin-top:24px;">
+    <div class="summary-item"><div class="num emotion-num">12</div><div class="lbl">情感共鸣型<br>冲赞量</div></div>
+    <div class="summary-item"><div class="num guide-num">15</div><div class="lbl">攻略工具型<br>冲收藏</div></div>
+    <div class="summary-item"><div class="num interact-num">10</div><div class="lbl">互动触发型<br>冲评论</div></div>
+    <div class="summary-item"><div class="num doctor-num">8</div><div class="lbl">医生IP型<br>建信任</div></div>
+    <div class="summary-item"><div class="num city-num">5</div><div class="lbl">城市本地型<br>精准获客</div></div>
+  </div>
+
+  <!-- 使用说明 -->
+  <div class="tips-box">
+    <h3>📌 使用说明 — 如何把选题变成爆款</h3>
+    <ul class="tips-list">
+      <li>标题中【城市】占位符：替换为目标城市（上海/无锡/苏州等）</li>
+      <li>标题中【医院】占位符：上海选中山/仁济/瑞金，无锡选市人医/二院</li>
+      <li>情感型帖子：正文必须有"恐惧→过程→松了一口气"三段式结构</li>
+      <li>攻略型帖子：正文至少覆盖预约/准备/检查/报告四个环节</li>
+      <li>发布时间：工作日早8-9点或晚8-10点，攻略帖周末全天均可</li>
+      <li>互动型帖子：结尾必须留钩子（"你有过这种经历吗？"）</li>
+      <li>标题字数：控制在11-20字，均赞是短标题的2.6倍</li>
+      <li>医生IP型：用「科室名+从业年数」开头，增加可信度</li>
+    </ul>
+  </div>
+
+  <!-- 筛选按钮 -->
+  <div class="filter-bar">
+    <button class="filter-btn active" onclick="filterTopics('all',this)">全部（50）</button>
+    <button class="filter-btn" onclick="filterTopics('emotion',this)">❤️ 情感共鸣（12）</button>
+    <button class="filter-btn" onclick="filterTopics('guide',this)">🔖 攻略工具（15）</button>
+    <button class="filter-btn" onclick="filterTopics('interact',this)">💬 互动触发（10）</button>
+    <button class="filter-btn" onclick="filterTopics('doctor',this)">👨‍⚕️ 医生IP（8）</button>
+    <button class="filter-btn" onclick="filterTopics('city',this)">🏙️ 城市本地（5）</button>
+  </div>
+
+  <!-- ===== 情感共鸣型 ===== -->
+  <div class="topic-section" data-type="emotion">
+    <div class="section-header">
+      <span class="section-icon">❤️</span>
+      <span class="section-title">情感共鸣型</span>
+      <span class="section-desc">目标：冲赞量 · 数据参考：均赞8503（有痛类），单篇最高41,670赞</span>
+    </div>
+    <div class="topic-grid">
+
+      <div class="topic-card type-emotion">
+        <div class="topic-num">01</div>
+        <span class="topic-type-tag tag-emotion">情感共鸣</span>
+        <div class="topic-title">关于我一个人去做了有痛胃镜，比想象中……</div>
+        <div class="topic-meta">
+          <span class="meta-item hot">🔥 直接仿写爆款</span>
+          <span class="meta-item">孤独感</span>
+          <span class="meta-item">悬念结尾</span>
+        </div>
+        <div class="topic-why"><strong>为什么选：</strong>原帖41,670赞，直接套公式。「一个人去」触发孤独共鸣，「比想象中……」留悬念，点击率极高。正文写真实心理波动，结尾植入无痛更好的结论。</div>
+        <div class="topic-ref">参考原帖：<span>赞41670 藏3301 评2658</span></div>
+      </div>
+
+      <div class="topic-card type-emotion">
+        <div class="topic-num">02</div>
+        <span class="topic-type-tag tag-emotion">情感共鸣</span>
+        <div class="topic-title">第一次做胃肠镜，全麻醒来我说了什么……</div>
+        <div class="topic-meta">
+          <span class="meta-item hot">🔥 高潜爆款</span>
+          <span class="meta-item">第一次经历</span>
+          <span class="meta-item">悬念问题</span>
+        </div>
+        <div class="topic-why"><strong>为什么选：</strong>「全麻后会乱说话吗」是用户最高频焦虑，原帖22,723赞。改成「我说了什么」变成答案揭秘型，好奇心更强。可以轻松幽默处理，收藏赞评三丰收。</div>
+        <div class="topic-ref">参考原帖：<span>赞22723 藏4576 评1769</span></div>
+      </div>
+
+      <div class="topic-card type-emotion">
+        <div class="topic-num">03</div>
+        <span class="topic-type-tag tag-emotion">情感共鸣</span>
+        <div class="topic-title">在【城市】做了个胃镜，有些话想告诉你</div>
+        <div class="topic-meta">
+          <span class="meta-item">极简悬念</span>
+          <span class="meta-item">城市定位</span>
+          <span class="meta-item">倾诉感</span>
+        </div>
+        <div class="topic-why"><strong>为什么选：</strong>上海版「在上海做了个胃镜」赞2761，靠极简标题制造悬念。加「有些话想告诉你」增加温度感和倾诉感，读者代入感更强。正文真实记录心情变化即可。</div>
+        <div class="topic-ref">参考原帖：<span>赞2761 评354（上海）</span></div>
+      </div>
+
+      <div class="topic-card type-emotion">
+        <div class="topic-num">04</div>
+        <span class="topic-type-tag tag-emotion">情感共鸣</span>
+        <div class="topic-title">胃镜把我做哭了，但我不后悔去做</div>
+        <div class="topic-meta">
+          <span class="meta-item hot">🔥 情绪反转</span>
+          <span class="meta-item">痛苦→感悟</span>
+          <span class="meta-item">正向结尾</span>
+        </div>
+        <div class="topic-why"><strong>为什么选：</strong>负面情绪开头（哭了）+ 正向转折（不后悔）= 情绪反转结构，赞和评论都会很高。正文描述痛苦细节，结尾写「发现了XX问题，幸好去做了」，天然植入检查的必要性。</div>
+        <div class="topic-ref">参考逻辑：情绪反转型均赞 >3000</div>
+      </div>
+
+      <div class="topic-card type-emotion">
+        <div class="topic-num">05</div>
+        <span class="topic-type-tag tag-emotion">情感共鸣</span>
+        <div class="topic-title">一人肠胃镜全程记录，献给和我一样害怕的你</div>
+        <div class="topic-meta">
+          <span class="meta-item">共情宣言</span>
+          <span class="meta-item">全程记录</span>
+          <span class="meta-item">正能量</span>
+        </div>
+        <div class="topic-why"><strong>为什么选：</strong>「献给和我一样害怕的你」将读者纳入故事，建立强烈情感连接。原帖「一人胃镜半麻全程记录」赞2855。配合图文记录真实全程，赞和收藏都稳定。</div>
+        <div class="topic-ref">参考原帖：<span>赞2855 藏1281</span></div>
+      </div>
+
+      <div class="topic-card type-emotion">
+        <div class="topic-num">06</div>
+        <span class="topic-type-tag tag-emotion">情感共鸣</span>
+        <div class="topic-title">30岁第一次做胃肠镜，结果让我沉默了</div>
+        <div class="topic-meta">
+          <span class="meta-item hot">🔥 年龄焦虑</span>
+          <span class="meta-item">悬念结果</span>
+          <span class="meta-item">健康警示</span>
+        </div>
+        <div class="topic-why"><strong>为什么选：</strong>「30岁」精准触发年龄焦虑，「沉默了」制造强悬念。参考「30岁便血一周」帖赞719评476。正文写发现了小息肉或慢性胃炎，结尾说"幸好早做"，引导读者行动。</div>
+        <div class="topic-ref">参考原帖：<span>赞719 评476</span></div>
+      </div>
+
+      <div class="topic-card type-emotion">
+        <div class="topic-num">07</div>
+        <span class="topic-type-tag tag-emotion">情感共鸣</span>
+        <div class="topic-title">喝了4升泻药拉了12次，我终于「安全下车」了</div>
+        <div class="topic-meta">
+          <span class="meta-item">真实细节</span>
+          <span class="meta-item">自嘲幽默</span>
+          <span class="meta-item">圈子术语</span>
+        </div>
+        <div class="topic-why"><strong>为什么选：</strong>「拉了12次」上海原帖赞868，真实细节引发强烈共鸣。「安全下车」是小红书胃肠镜圈内流行术语，用圈子黑话增加归属感，圈内人必点赞必评论。</div>
+        <div class="topic-ref">参考原帖：<span>赞868 评350（上海）</span></div>
+      </div>
+
+      <div class="topic-card type-emotion">
+        <div class="topic-num">08</div>
+        <span class="topic-type-tag tag-emotion">情感共鸣</span>
+        <div class="topic-title">妈妈让我陪她做肠镜，我在候诊室哭了</div>
+        <div class="topic-meta">
+          <span class="meta-item hot">🔥 家人情感</span>
+          <span class="meta-item">催泪场景</span>
+          <span class="meta-item">陪伴主题</span>
+        </div>
+        <div class="topic-why"><strong>为什么选：</strong>家人检查的陪伴视角是全新切入点，情感烈度极高。参考「妈妈肠镜诊断为直肠癌」赞2135。陪检视角可以更自然地介绍流程，且不会让人觉得是软文。</div>
+        <div class="topic-ref">参考原帖：<span>赞2135 评766</span></div>
+      </div>
+
+      <div class="topic-card type-emotion">
+        <div class="topic-num">09</div>
+        <span class="topic-type-tag tag-emotion">情感共鸣</span>
+        <div class="topic-title">万幸做了这次胃肠镜，查出来的东西吓了我一跳</div>
+        <div class="topic-meta">
+          <span class="meta-item">庆幸感</span>
+          <span class="meta-item">悬念结果</span>
+          <span class="meta-item">健康警示</span>
+        </div>
+        <div class="topic-why"><strong>为什么选：</strong>原帖「万幸做了一次肠胃镜检查」赞1109评1245。「万幸」带出庆幸的正向情绪，「吓了一跳」制造悬念。这类帖子能同时触发「我也要去查」的行动意图。</div>
+        <div class="topic-ref">参考原帖：<span>赞1109 评1245</span></div>
+      </div>
+
+      <div class="topic-card type-emotion">
+        <div class="topic-num">10</div>
+        <span class="topic-type-tag tag-emotion">情感共鸣</span>
+        <div class="topic-title">连续7年每年做肠胃镜是什么体验？</div>
+        <div class="topic-meta">
+          <span class="meta-item hot">🔥 长期经历</span>
+          <span class="meta-item">权威感</span>
+          <span class="meta-item">系列感</span>
+        </div>
+        <div class="topic-why"><strong>为什么选：</strong>「连续7年」制造权威经历人设，原帖赞1357。可作为系列帖开篇，建立账号专业人设。每年的变化和感受是天然内容素材，适合打造个人IP。</div>
+        <div class="topic-ref">参考原帖：<span>赞1357 评321</span></div>
+      </div>
+
+      <div class="topic-card type-emotion">
+        <div class="topic-num">11</div>
+        <span class="topic-type-tag tag-emotion">情感共鸣</span>
+        <div class="topic-title">做胃镜差点进了ICU，真实经历说给你听</div>
+        <div class="topic-meta">
+          <span class="meta-item hot">🔥 极端案例</span>
+          <span class="meta-item">警示故事</span>
+          <span class="meta-item">高讨论度</span>
+        </div>
+        <div class="topic-why"><strong>为什么选：</strong>原帖「做无痛胃镜到差点进ICU抢救」赞1661评1327，讨论极热。极端风险案例触发强烈恐惧，评论区变成分析原因的讨论区。注意：正文需交代是特殊情况，避免引起不必要恐慌。</div>
+        <div class="topic-ref">参考原帖：<span>赞1661 评1327</span></div>
+      </div>
+
+      <div class="topic-card type-emotion">
+        <div class="topic-num">12</div>
+        <span class="topic-type-tag tag-emotion">情感共鸣</span>
+        <div class="topic-title">感谢医学进步，我不用做胃镜就查清楚了！</div>
+        <div class="topic-meta">
+          <span class="meta-item hot">🔥 新技术话题</span>
+          <span class="meta-item">胶囊胃镜</span>
+          <span class="meta-item">惊喜感</span>
+        </div>
+        <div class="topic-why"><strong>为什么选：</strong>原帖「感谢医学进步不用做胃镜」赞2835评1146，讨论热烈。胶囊胃镜/磁控胶囊是新技术，制造惊喜感。「不用做胃镜」对于恐惧人群是终极诱惑，点击率极高。</div>
+        <div class="topic-ref">参考原帖：<span>赞2835 藏1396 评1146</span></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ===== 攻略工具型 ===== -->
+  <div class="topic-section" data-type="guide">
+    <div class="section-header">
+      <span class="section-icon">🔖</span>
+      <span class="section-title">攻略工具型</span>
+      <span class="section-desc">目标：冲收藏 · 数据参考：中山医院攻略帖藏5228，全流程帖藏13090</span>
+    </div>
+    <div class="topic-grid">
+
+      <div class="topic-card type-guide">
+        <div class="topic-num">13</div>
+        <span class="topic-type-tag tag-guide">攻略工具</span>
+        <div class="topic-title">【城市·医院】无痛胃肠镜全攻略｜最适合上班族</div>
+        <div class="topic-meta">
+          <span class="meta-item hot">🔥 直接仿写TOP</span>
+          <span class="meta-item">医院背书</span>
+          <span class="meta-item">人群精准</span>
+        </div>
+        <div class="topic-why"><strong>为什么选：</strong>上海中山医院版赞3366收藏5228，公式是：城市+知名医院+人群定位+攻略。换成无锡市人医/苏大附一院同样适用。「最适合上班族」把人群精准定义，增加收藏动机。</div>
+        <div class="topic-ref">参考原帖：<span>赞3366 藏5228（TOP收藏）</span></div>
+      </div>
+
+      <div class="topic-card type-guide">
+        <div class="topic-num">14</div>
+        <span class="topic-type-tag tag-guide">攻略工具</span>
+        <div class="topic-title">无痛肠胃镜1小时完成！【城市·医院】预约全流程</div>
+        <div class="topic-meta">
+          <span class="meta-item hot">🔥 时间量化</span>
+          <span class="meta-item">预约痛点</span>
+          <span class="meta-item">高收藏</span>
+        </div>
+        <div class="topic-why"><strong>为什么选：</strong>仁济版「1小时完成预约」赞2572收藏3997。「1小时」量化时间成本，直接击中上班族最大顾虑。无锡/苏州版可写「半天搞定」，不同城市适用同一公式。</div>
+        <div class="topic-ref">参考原帖：<span>赞2572 藏3997</span></div>
+      </div>
+
+      <div class="topic-card type-guide">
+        <div class="topic-num">15</div>
+        <span class="topic-type-tag tag-guide">攻略工具</span>
+        <div class="topic-title">无痛肠胃镜检查注意事项+正确体位+全流程图解</div>
+        <div class="topic-meta">
+          <span class="meta-item hot">🔥 高价值关键词</span>
+          <span class="meta-item">正确体位</span>
+          <span class="meta-item">图解形式</span>
+        </div>
+        <div class="topic-why"><strong>为什么选：</strong>含「正确体位」的原帖赞5943收藏2741。「正确体位」是用户很少被告知但非常关心的细节，触发强收藏。内容做图解形式（姿势示意图），收藏率更高。</div>
+        <div class="topic-ref">参考原帖：<span>赞5943 藏2741</span></div>
+      </div>
+
+      <div class="topic-card type-guide">
+        <div class="topic-num">16</div>
+        <span class="topic-type-tag tag-guide">攻略工具</span>
+        <div class="topic-title">【城市】做胃肠镜完全避坑指南｜这些费用能不花</div>
+        <div class="topic-meta">
+          <span class="meta-item">省钱攻略</span>
+          <span class="meta-item">避坑逻辑</span>
+          <span class="meta-item">强收藏动机</span>
+        </div>
+        <div class="topic-why"><strong>为什么选：</strong>「自费0元一上午做完苏大附一院体检」赞2329收藏3209，省钱内容收藏率极高。「能不花的费用」从用户角度出发，更能建立信任感，同时自然引导正确消费路径。</div>
+        <div class="topic-ref">参考原帖：<span>赞2329 藏3209</span></div>
+      </div>
+
+      <div class="topic-card type-guide">
+        <div class="topic-num">17</div>
+        <span class="topic-type-tag tag-guide">攻略工具</span>
+        <div class="topic-title">肠镜报告单10个「密语」完全解读！看懂再出院</div>
+        <div class="topic-meta">
+          <span class="meta-item hot">🔥 专业科普</span>
+          <span class="meta-item">报告解读</span>
+          <span class="meta-item">刚需收藏</span>
+        </div>
+        <div class="topic-why"><strong>为什么选：</strong>「肠息肉肠镜报告的几个密语」原帖赞1381收藏1336，收藏/赞比接近1:1。做完检查的人100%需要看懂报告单，是绝对刚需内容，收藏留存率极高。</div>
+        <div class="topic-ref">参考原帖：<span>赞1381 藏1336</span></div>
+      </div>
+
+      <div class="topic-card type-guide">
+        <div class="topic-num">18</div>
+        <span class="topic-type-tag tag-guide">攻略工具</span>
+        <div class="topic-title">胃镜 vs 肠镜 vs 胶囊，傻傻分不清楚？一篇搞定</div>
+        <div class="topic-meta">
+          <span class="meta-item">科普对比</span>
+          <span class="meta-item">选择指南</span>
+          <span class="meta-item">入门必读</span>
+        </div>
+        <div class="topic-why"><strong>为什么选：</strong>原帖「肠镜VS胃镜别再傻傻分不清楚」赞1994收藏1174。加入「胶囊」三方对比更全面，是绝对的入门科普刚需，适合新账号冷启动用，能持续带来搜索流量。</div>
+        <div class="topic-ref">参考原帖：<span>赞1994 藏1174</span></div>
+      </div>
+
+      <div class="topic-card type-guide">
+        <div class="topic-num">19</div>
+        <span class="topic-type-tag tag-guide">攻略工具</span>
+        <div class="topic-title">做肠胃镜前中后｜10个最常见问题，答案都在这</div>
+        <div class="topic-meta">
+          <span class="meta-item hot">🔥 FAQ合集</span>
+          <span class="meta-item">时间线结构</span>
+          <span class="meta-item">收藏率高</span>
+        </div>
+        <div class="topic-why"><strong>为什么选：</strong>原帖「肠镜前中后10问10答」赞373收藏625，收藏/赞比1.7倍。FAQ合集是工具型内容天花板，结构清晰，读者会"以后再看"而收藏。扩展到10问提升内容量。</div>
+        <div class="topic-ref">参考原帖：<span>赞373 藏625</span></div>
+      </div>
+
+      <div class="topic-card type-guide">
+        <div class="topic-num">20</div>
+        <span class="topic-type-tag tag-guide">攻略工具</span>
+        <div class="topic-title">无痛胃肠镜全流程（上）：预约+准备+注意事项</div>
+        <div class="topic-meta">
+          <span class="meta-item hot">🔥 系列帖</span>
+          <span class="meta-item">分上中下三篇</span>
+          <span class="meta-item">账号留存</span>
+        </div>
+        <div class="topic-why"><strong>为什么选：</strong>「无痛胃肠镜全流程（中）」赞4969收藏5191，系列帖能把用户留在账号里。拆分成上中下三篇，每篇深度挖掘一个阶段，三篇合计互动量远超单篇，也能持续涨粉。</div>
+        <div class="topic-ref">参考原帖：<span>赞4969 藏5191（仅「中」篇）</span></div>
+      </div>
+
+      <div class="topic-card type-guide">
+        <div class="topic-num">21</div>
+        <span class="topic-type-tag tag-guide">攻略工具</span>
+        <div class="topic-title">打工人不请假完成胃肠镜！时间安排完全攻略</div>
+        <div class="topic-meta">
+          <span class="meta-item hot">🔥 上班族痛点</span>
+          <span class="meta-item">时间规划</span>
+          <span class="meta-item">实操性强</span>
+        </div>
+        <div class="topic-why"><strong>为什么选：</strong>「打工人不请假仁济东院普通胃镜」赞692收藏835，上班族最大痛点就是请假。写清楚「几点挂号、几点到院、几点完成」的时间轴，是上班族必收藏的实战攻略。</div>
+        <div class="topic-ref">参考原帖：<span>赞692 藏835（上海）</span></div>
+      </div>
+
+      <div class="topic-card type-guide">
+        <div class="topic-num">22</div>
+        <span class="topic-type-tag tag-guide">攻略工具</span>
+        <div class="topic-title">【城市·医院】专家胃肠镜容易踩的5个坑</div>
+        <div class="topic-meta">
+          <span class="meta-item">踩坑预防</span>
+          <span class="meta-item">医院具体</span>
+          <span class="meta-item">强转化</span>
+        </div>
+        <div class="topic-why"><strong>为什么选：</strong>「瑞金医院专家胃肠镜容易踩的坑」赞608收藏1250，收藏/赞比2倍。「坑」字触发规避心理，用户担心踩坑就会收藏。具体到医院名，搜索精准流量极佳。</div>
+        <div class="topic-ref">参考原帖：<span>赞608 藏1250（上海瑞金）</span></div>
+      </div>
+
+      <div class="topic-card type-guide">
+        <div class="topic-num">23</div>
+        <span class="topic-type-tag tag-guide">攻略工具</span>
+        <div class="topic-title">发现肠息肉之后怎么办？复查时间表+注意事项</div>
+        <div class="topic-meta">
+          <span class="meta-item">检后管理</span>
+          <span class="meta-item">刚需内容</span>
+          <span class="meta-item">长期留存</span>
+        </div>
+        <div class="topic-why"><strong>为什么选：</strong>数据显示「肠息肉」相关帖均赞185、收藏率稳定。做完检查发现息肉的患者是强需求群体，「复查时间表」是超强收藏动机内容，且会被长期反复查阅。</div>
+        <div class="topic-ref">参考逻辑：息肉类帖收藏/赞比 >1</div>
+      </div>
+
+      <div class="topic-card type-guide">
+        <div class="topic-num">24</div>
+        <span class="topic-type-tag tag-guide">攻略工具</span>
+        <div class="topic-title">怕痛不敢做胃镜？这4种方式不用插管也能查</div>
+        <div class="topic-meta">
+          <span class="meta-item hot">🔥 恐惧解决方案</span>
+          <span class="meta-item">胶囊胃镜</span>
+          <span class="meta-item">无痛方案</span>
+        </div>
+        <div class="topic-why"><strong>为什么选：</strong>「怕痛不做胃肠镜如何查胃肠道癌症」赞1142收藏999，「怕痛」是最大拦截词。提供多种替代方案（胶囊镜、磁控胶囊、血液检测等）给恐惧人群出路，同时植入无痛方案最优解。</div>
+        <div class="topic-ref">参考原帖：<span>赞1142 藏999</span></div>
+      </div>
+
+      <div class="topic-card type-guide">
+        <div class="topic-num">25</div>
+        <span class="topic-type-tag tag-guide">攻略工具</span>
+        <div class="topic-title">胶囊胃镜5元自费？！【城市】医保报销全攻略</div>
+        <div class="topic-meta">
+          <span class="meta-item hot">🔥 价格冲击</span>
+          <span class="meta-item">医保政策</span>
+          <span class="meta-item">极强收藏</span>
+        </div>
+        <div class="topic-why"><strong>为什么选：</strong>「胶囊胃镜自费5元」原帖赞334评303，评论率极高。医保报销信息是绝对刚需，用「5元」这样冲击性的价格开头制造惊喜，收藏+转发动机极强，适合各城市版本制作。</div>
+        <div class="topic-ref">参考原帖：<span>赞334 评303（高评论率）</span></div>
+      </div>
+
+      <div class="topic-card type-guide">
+        <div class="topic-num">26</div>
+        <span class="topic-type-tag tag-guide">攻略工具</span>
+        <div class="topic-title">胃肠镜检查全攻略 2025最新版｜建议人手一份</div>
+        <div class="topic-meta">
+          <span class="meta-item hot">🔥 终极合集</span>
+          <span class="meta-item">年份时效性</span>
+          <span class="meta-item">转发动机</span>
+        </div>
+        <div class="topic-why"><strong>为什么选：</strong>「胃肠镜检查全流程」赞5111收藏3584，极简标题+全流程=高收藏。加「2025最新版」增加时效性，「人手一份」触发转发分享。内容要真正全面，覆盖从预约到取报告每个步骤。</div>
+        <div class="topic-ref">参考原帖：<span>赞5111 藏3584</span></div>
+      </div>
+
+      <div class="topic-card type-guide">
+        <div class="topic-num">27</div>
+        <span class="topic-type-tag tag-guide">攻略工具</span>
+        <div class="topic-title">萎缩性胃炎分级全解析｜你的报告是几级？</div>
+        <div class="topic-meta">
+          <span class="meta-item hot">🔥 检后需求</span>
+          <span class="meta-item">报告解读</span>
+          <span class="meta-item">对号入座</span>
+        </div>
+        <div class="topic-why"><strong>为什么选：</strong>「萎缩性胃炎严重分级」无锡帖赞1553收藏1255，针对已确诊人群。「你是几级」让每个看帖的人都要对号入座，评论和收藏都会很高。检后科普是高度精准的刚需内容。</div>
+        <div class="topic-ref">参考原帖：<span>赞1553 藏1255（无锡）</span></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ===== 互动触发型 ===== -->
+  <div class="topic-section" data-type="interact">
+    <div class="section-header">
+      <span class="section-icon">💬</span>
+      <span class="section-title">互动触发型</span>
+      <span class="section-desc">目标：冲评论 · 数据参考：无锡「6种人必做胃镜」评1541，评论/赞比超高</span>
+    </div>
+    <div class="topic-grid">
+
+      <div class="topic-card type-interact">
+        <div class="topic-num">28</div>
+        <span class="topic-type-tag tag-interact">互动触发</span>
+        <div class="topic-title">这6种人最好马上去做胃镜，你中了几条？</div>
+        <div class="topic-meta">
+          <span class="meta-item hot">🔥 直接仿写爆款</span>
+          <span class="meta-item">对号入座</span>
+          <span class="meta-item">评论爆炸</span>
+        </div>
+        <div class="topic-why"><strong>为什么选：</strong>无锡原帖赞819评1541，评论是点赞的1.9倍，说明互动率极高。「你中了几条？」是评论钩子，每个人都会在评论区自报家门。是医生IP账号最好的起步内容。</div>
+        <div class="topic-ref">参考原帖：<span>赞819 评1541（无锡）</span></div>
+      </div>
+
+      <div class="topic-card type-interact">
+        <div class="topic-num">29</div>
+        <span class="topic-type-tag tag-interact">互动触发</span>
+        <div class="topic-title">普通人真的不要做普通胃镜！这是为什么？</div>
+        <div class="topic-meta">
+          <span class="meta-item hot">🔥 强警告式</span>
+          <span class="meta-item">逆向立场</span>
+          <span class="meta-item">引发辩论</span>
+        </div>
+        <div class="topic-why"><strong>为什么选：</strong>原帖赞3731评2672，是整个数据集评论率最高的帖子之一。「不要做」的逆向建议制造认知冲突，读者第一反应是「为什么？」或「我不同意」，两种反应都会促发评论。</div>
+        <div class="topic-ref">参考原帖：<span>赞3731 评2672</span></div>
+      </div>
+
+      <div class="topic-card type-interact">
+        <div class="topic-num">30</div>
+        <span class="topic-type-tag tag-interact">互动触发</span>
+        <div class="topic-title">做胃肠镜哪家医院好？【城市】真实排名来了</div>
+        <div class="topic-meta">
+          <span class="meta-item hot">🔥 医院对比</span>
+          <span class="meta-item">排名形式</span>
+          <span class="meta-item">引发补充</span>
+        </div>
+        <div class="topic-why"><strong>为什么选：</strong>原帖「无锡这两个医院哪个做胃镜好」评212，评论远超点赞。做成城市医院排名，每个在不同医院做过的人都会补充发言或反驳，评论区会成为真实口碑聚集地。</div>
+        <div class="topic-ref">参考原帖：<span>评212（超越点赞64）</span></div>
+      </div>
+
+      <div class="topic-card type-interact">
+        <div class="topic-num">31</div>
+        <span class="topic-type-tag tag-interact">互动触发</span>
+        <div class="topic-title">肠镜不要乱做！这4种情况其实根本不用做</div>
+        <div class="topic-meta">
+          <span class="meta-item">逆向建议</span>
+          <span class="meta-item">专业立场</span>
+          <span class="meta-item">高可信度</span>
+        </div>
+        <div class="topic-why"><strong>为什么选：</strong>「肠镜不要乱做这些情况不用做」赞530评224，「不用做」作为医疗内容的逆向建议，反而建立高可信度。用户会在评论区询问自己的情况，带来大量互动和私信询问。</div>
+        <div class="topic-ref">参考原帖：<span>赞530 评224</span></div>
+      </div>
+
+      <div class="topic-card type-interact">
+        <div class="topic-num">32</div>
+        <span class="topic-type-tag tag-interact">互动触发</span>
+        <div class="topic-title">做完肠胃镜离谱事件大赏，你遇到过这些吗？</div>
+        <div class="topic-meta">
+          <span class="meta-item hot">🔥 UGC激发</span>
+          <span class="meta-item">吐槽合集</span>
+          <span class="meta-item">评论补充</span>
+        </div>
+        <div class="topic-why"><strong>为什么选：</strong>「离谱！肠胃镜麻药后直接住院了！」赞1601评1401，「离谱」系列引发强烈吐槽欲。做成合集，每条离谱经历后留白，读者会自动在评论区补充自己的离谱遭遇，评论量爆炸。</div>
+        <div class="topic-ref">参考原帖：<span>赞1601 评1401</span></div>
+      </div>
+
+      <div class="topic-card type-interact">
+        <div class="topic-num">33</div>
+        <span class="topic-type-tag tag-interact">互动触发</span>
+        <div class="topic-title">胃镜VS肠镜，你更怕哪个？投票！</div>
+        <div class="topic-meta">
+          <span class="meta-item">投票互动</span>
+          <span class="meta-item">轻松话题</span>
+          <span class="meta-item">低门槛评论</span>
+        </div>
+        <div class="topic-why"><strong>为什么选：</strong>投票式选题降低评论门槛，所有人都有立场。正文简单分析两种检查的感受差异，评论区直接成为民意调查，账号互动数据极好。适合新账号初期积累互动权重。</div>
+        <div class="topic-ref">参考逻辑：低门槛投票类帖评论率 >3倍</div>
+      </div>
+
+      <div class="topic-card type-interact">
+        <div class="topic-num">34</div>
+        <span class="topic-type-tag tag-interact">互动触发</span>
+        <div class="topic-title">肠镜穿孔了，这事的概率到底有多高？</div>
+        <div class="topic-meta">
+          <span class="meta-item hot">🔥 恐惧话题</span>
+          <span class="meta-item">风险认知</span>
+          <span class="meta-item">强讨论欲</span>
+        </div>
+        <div class="topic-why"><strong>为什么选：</strong>「肠镜检查穿孔了」原帖赞2415评1339，高风险事件触发强讨论。改成「概率到底有多高」变成科普向，既能引发讨论，又不造成不必要恐慌，用数据安抚用户。</div>
+        <div class="topic-ref">参考原帖：<span>赞2415 评1339</span></div>
+      </div>
+
+      <div class="topic-card type-interact">
+        <div class="topic-num">35</div>
+        <span class="topic-type-tag tag-interact">互动触发</span>
+        <div class="topic-title">做胃肠镜前喝泻药，你拉了几次？来晒一下</div>
+        <div class="topic-meta">
+          <span class="meta-item">幽默吐槽</span>
+          <span class="meta-item">共同经历</span>
+          <span class="meta-item">低门槛互动</span>
+        </div>
+        <div class="topic-why"><strong>为什么选：</strong>喝泻药是所有肠镜患者共同的"战争"，「拉了12次」上海帖赞868。做成征集评论的互动帖，每个做过肠镜的人都会来报数，同时形成互相安慰的评论氛围，极易出圈。</div>
+        <div class="topic-ref">参考原帖：<span>赞868 评350（上海）</span></div>
+      </div>
+
+      <div class="topic-card type-interact">
+        <div class="topic-num">36</div>
+        <span class="topic-type-tag tag-interact">互动触发</span>
+        <div class="topic-title">做完胃肠镜你最想吃什么？检后第一餐大晒</div>
+        <div class="topic-meta">
+          <span class="meta-item">轻松话题</span>
+          <span class="meta-item">正向情绪</span>
+          <span class="meta-item">评论激发</span>
+        </div>
+        <div class="topic-why"><strong>为什么选：</strong>「安全下车」系列的轻松延伸。检完的解脱感+食物话题=极强互动性。读者会在评论区晒自己的答案，带来大量UGC内容。适合作为情感类帖子的轻松配档，活跃账号氛围。</div>
+        <div class="topic-ref">参考逻辑：安全下车类帖评论率高</div>
+      </div>
+
+      <div class="topic-card type-interact">
+        <div class="topic-num">37</div>
+        <span class="topic-type-tag tag-interact">互动触发</span>
+        <div class="topic-title">肠胃镜和全腹CT，医生推荐查哪个？你选哪个</div>
+        <div class="topic-meta">
+          <span class="meta-item">选择题</span>
+          <span class="meta-item">引发辩论</span>
+          <span class="meta-item">科普价值</span>
+        </div>
+        <div class="topic-why"><strong>为什么选：</strong>「肠胃镜全腹CT」赞1470评614，对比型内容讨论热烈。改成「你选哪个」让用户参与投票，同时植入专业判断（不同情况选不同方式），兼顾互动性和科普价值，账号可信度上升。</div>
+        <div class="topic-ref">参考原帖：<span>赞1470 评614</span></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ===== 医生IP型 ===== -->
+  <div class="topic-section" data-type="doctor">
+    <div class="section-header">
+      <span class="section-icon">👨‍⚕️</span>
+      <span class="section-title">医生IP型</span>
+      <span class="section-desc">目标：建立专业信任 · 适合打造医生个人IP账号</span>
+    </div>
+    <div class="topic-grid">
+
+      <div class="topic-card type-doctor">
+        <div class="topic-num">38</div>
+        <span class="topic-type-tag tag-doctor">医生IP</span>
+        <div class="topic-title">消化科医生说实话：这才是做胃镜的最佳年龄</div>
+        <div class="topic-meta">
+          <span class="meta-item hot">🔥 专业权威</span>
+          <span class="meta-item">「说实话」钩子</span>
+          <span class="meta-item">颠覆认知</span>
+        </div>
+        <div class="topic-why"><strong>为什么选：</strong>「说实话」标签颠覆官方立场，给读者「内部消息」感。年龄是用户最常搜索的问题（多少岁该做第一次胃镜）。医生视角的建议天然权威，搭配真实案例数据，信服力极强。</div>
+        <div class="topic-ref">参考逻辑：医生IP帖均赞是普通帖的2-3倍</div>
+      </div>
+
+      <div class="topic-card type-doctor">
+        <div class="topic-num">39</div>
+        <span class="topic-type-tag tag-doctor">医生IP</span>
+        <div class="topic-title">做了【X】年胃肠镜，我接诊的患者最常说这句话</div>
+        <div class="topic-meta">
+          <span class="meta-item">从业经历</span>
+          <span class="meta-item">患者视角</span>
+          <span class="meta-item">情感共情</span>
+        </div>
+        <div class="topic-why"><strong>为什么选：</strong>从业年限量化专业度，患者最常说的话是悬念钩子。正文可以写「如果早来就好了」「没想到那么快结束」等真实反馈，既有情感温度，又有专业背书，适合账号初期人设建立。</div>
+        <div class="topic-ref">参考原帖：<span>赞1357（7年经历帖）</span></div>
+      </div>
+
+      <div class="topic-card type-doctor">
+        <div class="topic-num">40</div>
+        <span class="topic-type-tag tag-doctor">医生IP</span>
+        <div class="topic-title">【城市】消化科医生：这些胃肠镜检查建议不要信</div>
+        <div class="topic-meta">
+          <span class="meta-item hot">🔥 辟谣型</span>
+          <span class="meta-item">认知颠覆</span>
+          <span class="meta-item">评论引爆</span>
+        </div>
+        <div class="topic-why"><strong>为什么选：</strong>辟谣类内容是小红书上医疗健康账号增长最快的类型。「不要信」制造认知冲突，读者会好奇「到底哪些不要信」。城市定位增加本地信任感，适合有真实医生IP的账号。</div>
+        <div class="topic-ref">参考逻辑：辟谣类均赞 >1500</div>
+      </div>
+
+      <div class="topic-card type-doctor">
+        <div class="topic-num">41</div>
+        <span class="topic-type-tag tag-doctor">医生IP</span>
+        <div class="topic-title">胃肠镜医生不会主动告诉你的5件事</div>
+        <div class="topic-meta">
+          <span class="meta-item hot">🔥 内幕感</span>
+          <span class="meta-item">「不会告诉你」钩子</span>
+          <span class="meta-item">高转发</span>
+        </div>
+        <div class="topic-why"><strong>为什么选：</strong>「不会主动告诉你」给读者获得内幕信息的感觉，点击率极高。内容可涵盖：怎么选无痛/有痛、什么情况必须活检、报告怎么读懂、复查周期怎么定等实用信息，收藏+转发双高。</div>
+        <div class="topic-ref">参考逻辑：内幕类帖均赞 >2000</div>
+      </div>
+
+      <div class="topic-card type-doctor">
+        <div class="topic-num">42</div>
+        <span class="topic-type-tag tag-doctor">医生IP</span>
+        <div class="topic-title">自己给自己做胃镜是什么体验？消化科医生亲历</div>
+        <div class="topic-meta">
+          <span class="meta-item hot">🔥 极度稀缺视角</span>
+          <span class="meta-item">反转预期</span>
+          <span class="meta-item">高传播</span>
+        </div>
+        <div class="topic-why"><strong>为什么选：</strong>「自己给自己做胃镜」原帖赞2372，极度稀缺视角制造强好奇心。医生版本更有说服力：「即使是我这个医生，做的时候也会……」，打破患者对「医生肯定没感觉」的误解，引发强烈共情。</div>
+        <div class="topic-ref">参考原帖：<span>赞2372 评423</span></div>
+      </div>
+
+      <div class="topic-card type-doctor">
+        <div class="topic-num">43</div>
+        <span class="topic-type-tag tag-doctor">医生IP</span>
+        <div class="topic-title">接诊1000例后，我总结了【城市】人最常见的3个胃病</div>
+        <div class="topic-meta">
+          <span class="meta-item">数据权威</span>
+          <span class="meta-item">城市定制</span>
+          <span class="meta-item">本地信任</span>
+        </div>
+        <div class="topic-why"><strong>为什么选：</strong>「1000例」数量化增加权威感，城市定制增加本地信任（无锡人看「无锡最常见」会更有代入感）。可以结合当地饮食习惯（无锡偏甜、上海快节奏）做差异化分析，增加原创价值。</div>
+        <div class="topic-ref">参考逻辑：城市定制医生帖均赞 >400</div>
+      </div>
+
+      <div class="topic-card type-doctor">
+        <div class="topic-num">44</div>
+        <span class="topic-type-tag tag-doctor">医生IP</span>
+        <div class="topic-title">肠息肉切完了，然后呢？医生告诉你复查时间表</div>
+        <div class="topic-meta">
+          <span class="meta-item">检后管理</span>
+          <span class="meta-item">刚需科普</span>
+          <span class="meta-item">长期搜索</span>
+        </div>
+        <div class="topic-why"><strong>为什么选：</strong>肠息肉切除后的随访是强刚需，患者高度依赖医生指导。「医生告诉你」增加权威性，内容给出不同息肉类型的复查间隔，是能长期获得搜索流量的常青内容。</div>
+        <div class="topic-ref">参考逻辑：检后内容收藏率 >1.5倍均值</div>
+      </div>
+
+      <div class="topic-card type-doctor">
+        <div class="topic-num">45</div>
+        <span class="topic-type-tag tag-doctor">医生IP</span>
+        <div class="topic-title">【城市】新的消化内镜中心也太豪华了！医生带你参观</div>
+        <div class="topic-meta">
+          <span class="meta-item hot">🔥 新设备话题</span>
+          <span class="meta-item">好奇心驱动</span>
+          <span class="meta-item">消除恐惧</span>
+        </div>
+        <div class="topic-why"><strong>为什么选：</strong>「瑞金医院新消化内镜中心也太豪华了」赞734收藏1350，新设备/环境帖效果极好。消除「医院=冷冰冰」的印象，豪华环境降低恐惧感。医生视角带参观，更有专业可信度。</div>
+        <div class="topic-ref">参考原帖：<span>赞734 藏1350（上海瑞金）</span></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ===== 城市本地型 ===== -->
+  <div class="topic-section" data-type="city">
+    <div class="section-header">
+      <span class="section-icon">🏙️</span>
+      <span class="section-title">城市本地型</span>
+      <span class="section-desc">目标：精准获客 · 直接触达目标城市潜在患者</span>
+    </div>
+    <div class="topic-grid">
+
+      <div class="topic-card type-city">
+        <div class="topic-num">46</div>
+        <span class="topic-type-tag tag-city">城市本地</span>
+        <div class="topic-title">上海做无痛胃肠镜｜中山 vs 仁济 vs 瑞金，我帮你比了</div>
+        <div class="topic-meta">
+          <span class="meta-item hot">🔥 三院对比</span>
+          <span class="meta-item">上海专属</span>
+          <span class="meta-item">决策参考</span>
+        </div>
+        <div class="topic-why"><strong>为什么选：</strong>上海用户在这三家医院之间选择时强需求对比内容，目前市场上缺少系统性对比帖。覆盖预约难度、等待时间、价格、体验、医生水平等维度，是超强收藏型内容，也是精准私信转化的入口。</div>
+        <div class="topic-ref">参考数据：三家医院合计帖子 77 条，均表现优秀</div>
+      </div>
+
+      <div class="topic-card type-city">
+        <div class="topic-num">47</div>
+        <span class="topic-type-tag tag-city">城市本地</span>
+        <div class="topic-title">无锡做胃肠镜，市人医 vs 二院 vs 嘉世消化，亲测对比</div>
+        <div class="topic-meta">
+          <span class="meta-item">无锡专属</span>
+          <span class="meta-item">三机构对比</span>
+          <span class="meta-item">精准获客</span>
+        </div>
+        <div class="topic-why"><strong>为什么选：</strong>无锡本地帖子中这三个机构出现最频繁，用户有明确的选择需求。民营机构（嘉世消化）与公立医院的比较是用户最常见的纠结点，做全面客观的对比，能触达最精准的转化人群。</div>
+        <div class="topic-ref">参考数据：无锡帖均赞61，本地精准流量价值高</div>
+      </div>
+
+      <div class="topic-card type-city">
+        <div class="topic-num">48</div>
+        <span class="topic-type-tag tag-city">城市本地</span>
+        <div class="topic-title">苏州做无痛胃肠镜｜周六全天可以做！亲测流程分享</div>
+        <div class="topic-meta">
+          <span class="meta-item hot">🔥 时间痛点</span>
+          <span class="meta-item">苏州专属</span>
+          <span class="meta-item">周末需求</span>
+        </div>
+        <div class="topic-why"><strong>为什么选：</strong>「苏州周六全麻肠胃镜安全下车」原帖赞562，周末能做是上班族的重大需求点。苏州目前帖子偏少（48条）但均赞79高于无锡，市场潜力好。「周六全天」精准解决上班族最大痛点。</div>
+        <div class="topic-ref">参考原帖：<span>赞562 评241（苏州）</span></div>
+      </div>
+
+      <div class="topic-card type-city">
+        <div class="topic-num">49</div>
+        <span class="topic-type-tag tag-city">城市本地</span>
+        <div class="topic-title">常州 / 宜兴 / 江阴做胃肠镜，去哪里最合适？</div>
+        <div class="topic-meta">
+          <span class="meta-item">小城市需求</span>
+          <span class="meta-item">本地稀缺内容</span>
+          <span class="meta-item">精准蓝海</span>
+        </div>
+        <div class="topic-why"><strong>为什么选：</strong>三个城市目前内容极少（常州42条均赞仅22，宜兴江阴更少），竞争几乎为零，是内容蓝海。本地用户搜索不到信息时，第一篇高质量内容就能垄断该关键词，获客成本极低。</div>
+        <div class="topic-ref">参考数据：常州/宜兴/江阴合计64条，远低于上海168条</div>
+      </div>
+
+      <div class="topic-card type-city">
+        <div class="topic-num">50</div>
+        <span class="topic-type-tag tag-city">城市本地</span>
+        <div class="topic-title">【城市】人注意！这个时间段预约胃肠镜最快，等不到1周</div>
+        <div class="topic-meta">
+          <span class="meta-item hot">🔥 预约技巧</span>
+          <span class="meta-item">时效信息</span>
+          <span class="meta-item">极强收藏</span>
+        </div>
+        <div class="topic-why"><strong>为什么选：</strong>「怎么快速约到号」是各城市用户最高频搜索之一。提供具体的抢号时段（早几点刷APP、退号高峰是几点）是稀缺干货，适用于每个目标城市，内容模板化后可批量生产多城市版本。</div>
+        <div class="topic-ref">参考逻辑：预约类帖均收藏 >300</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 发布优先级矩阵 -->
+  <div style="background:white;border-radius:16px;padding:24px;margin-bottom:28px;box-shadow:0 2px 12px rgba(0,0,0,.05);">
+    <div style="font-size:17px;font-weight:800;margin-bottom:16px;">📊 发布优先级矩阵 — 先发哪些？</div>
+    <table style="width:100%;border-collapse:collapse;font-size:13px;">
+      <thead>
+        <tr style="background:#f8f9fc;">
+          <th style="padding:10px 12px;text-align:left;font-weight:700;color:#555;border-bottom:2px solid #eee;">优先级</th>
+          <th style="padding:10px 12px;text-align:left;font-weight:700;color:#555;border-bottom:2px solid #eee;">选题</th>
+          <th style="padding:10px 12px;text-align:left;font-weight:700;color:#555;border-bottom:2px solid #eee;">目标</th>
+          <th style="padding:10px 12px;text-align:left;font-weight:700;color:#555;border-bottom:2px solid #eee;">预估互动</th>
+          <th style="padding:10px 12px;text-align:left;font-weight:700;color:#555;border-bottom:2px solid #eee;">适用城市</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="background:#fff0f3;">
+          <td style="padding:10px 12px;border-bottom:1px solid #f0f0f0;font-weight:700;color:#ff2442;">🔴 第1批</td>
+          <td style="padding:10px 12px;border-bottom:1px solid #f0f0f0;">No.01 一个人去做有痛胃镜</td>
+          <td style="padding:10px 12px;border-bottom:1px solid #f0f0f0;">冷启动冲赞量</td>
+          <td style="padding:10px 12px;border-bottom:1px solid #f0f0f0;color:#ff2442;font-weight:700;">赞 5000+</td>
+          <td style="padding:10px 12px;border-bottom:1px solid #f0f0f0;">全城市通用</td>
+        </tr>
+        <tr style="background:#fff0f3;">
+          <td style="padding:10px 12px;border-bottom:1px solid #f0f0f0;font-weight:700;color:#ff2442;">🔴 第1批</td>
+          <td style="padding:10px 12px;border-bottom:1px solid #f0f0f0;">No.13 城市医院无痛胃肠镜全攻略</td>
+          <td style="padding:10px 12px;border-bottom:1px solid #f0f0f0;">积累收藏/精准获客</td>
+          <td style="padding:10px 12px;border-bottom:1px solid #f0f0f0;color:#22c55e;font-weight:700;">藏 2000+</td>
+          <td style="padding:10px 12px;border-bottom:1px solid #f0f0f0;">上海/无锡/苏州</td>
+        </tr>
+        <tr style="background:#fff0f3;">
+          <td style="padding:10px 12px;border-bottom:1px solid #f0f0f0;font-weight:700;color:#ff2442;">🔴 第1批</td>
+          <td style="padding:10px 12px;border-bottom:1px solid #f0f0f0;">No.28 这6种人最好马上去做胃镜</td>
+          <td style="padding:10px 12px;border-bottom:1px solid #f0f0f0;">刷评论权重</td>
+          <td style="padding:10px 12px;border-bottom:1px solid #f0f0f0;color:#4a6cf7;font-weight:700;">评 800+</td>
+          <td style="padding:10px 12px;border-bottom:1px solid #f0f0f0;">全城市通用</td>
+        </tr>
+        <tr>
+          <td style="padding:10px 12px;border-bottom:1px solid #f0f0f0;font-weight:700;color:#f97316;">🟠 第2批</td>
+          <td style="padding:10px 12px;border-bottom:1px solid #f0f0f0;">No.02 全麻醒来我说了什么</td>
+          <td style="padding:10px 12px;border-bottom:1px solid #f0f0f0;">破圈传播</td>
+          <td style="padding:10px 12px;border-bottom:1px solid #f0f0f0;color:#ff2442;font-weight:700;">赞 10000+</td>
+          <td style="padding:10px 12px;border-bottom:1px solid #f0f0f0;">全城市通用</td>
+        </tr>
+        <tr>
+          <td style="padding:10px 12px;border-bottom:1px solid #f0f0f0;font-weight:700;color:#f97316;">🟠 第2批</td>
+          <td style="padding:10px 12px;border-bottom:1px solid #f0f0f0;">No.15 正确体位+全流程图解</td>
+          <td style="padding:10px 12px;border-bottom:1px solid #f0f0f0;">持续收藏</td>
+          <td style="padding:10px 12px;border-bottom:1px solid #f0f0f0;color:#22c55e;font-weight:700;">藏 3000+</td>
+          <td style="padding:10px 12px;border-bottom:1px solid #f0f0f0;">全城市通用</td>
+        </tr>
+        <tr>
+          <td style="padding:10px 12px;border-bottom:1px solid #f0f0f0;font-weight:700;color:#f97316;">🟠 第2批</td>
+          <td style="padding:10px 12px;border-bottom:1px solid #f0f0f0;">No.46 上海三大医院对比</td>
+          <td style="padding:10px 12px;border-bottom:1px solid #f0f0f0;">上海精准获客</td>
+          <td style="padding:10px 12px;border-bottom:1px solid #f0f0f0;color:#22c55e;font-weight:700;">藏 2000+</td>
+          <td style="padding:10px 12px;border-bottom:1px solid #f0f0f0;">上海</td>
+        </tr>
+        <tr style="background:#f0fff4;">
+          <td style="padding:10px 12px;border-bottom:1px solid #f0f0f0;font-weight:700;color:#22c55e;">🟢 第3批</td>
+          <td style="padding:10px 12px;border-bottom:1px solid #f0f0f0;">No.17 报告单密语解读</td>
+          <td style="padding:10px 12px;border-bottom:1px solid #f0f0f0;">检后留存</td>
+          <td style="padding:10px 12px;border-bottom:1px solid #f0f0f0;color:#22c55e;font-weight:700;">藏 1500+</td>
+          <td style="padding:10px 12px;border-bottom:1px solid #f0f0f0;">全城市通用</td>
+        </tr>
+        <tr style="background:#f0fff4;">
+          <td style="padding:10px 12px;font-weight:700;color:#22c55e;">🟢 第3批</td>
+          <td style="padding:10px 12px;">No.12 不用做胃镜也能查清楚</td>
+          <td style="padding:10px 12px;">破圈新用户</td>
+          <td style="padding:10px 12px;color:#ff2442;font-weight:700;">赞 3000+</td>
+          <td style="padding:10px 12px;">全城市通用</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+<footer>数据来源：小红书568条真实帖子 | 6城市覆盖 | 2026年3月 | 仅供内容创作参考</footer>
+
+<script>
+function filterTopics(type, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.topic-section').forEach(sec => {
+    if (type === 'all' || sec.dataset.type === type) {
+      sec.style.display = '';
+    } else {
+      sec.style.display = 'none';
+    }
+  });
+}
+</script>
+</body>
+</html>
